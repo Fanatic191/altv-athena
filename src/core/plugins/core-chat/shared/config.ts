@@ -31,7 +31,7 @@ export const CHAT_CONFIG = {
         // Max width of the message box
         'max-width': '400px',
         // Font size of the individual message
-        'font-size': '14px',
+        'font-size': '16px',
         // The boldness of the message
         'font-weight': 600,
         // The transparency of a message
