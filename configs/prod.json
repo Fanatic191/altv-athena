@@ -1,5 +1,5 @@
 {
-    "name": "Athena",
+    "name": "MonsterV | v0.0.5.5.",
     "host": "0.0.0.0",
     "env": "prod",
     "port": 7788,
@@ -8,28 +8,18 @@
     "token": null,
     "announce": false,
     "gamemode": "Roleplay",
-    "website": "athenaframework.com",
-    "language": "en",
-    "description": "Standard Production Configuration",
+    "website": "",
+    "language": "hu",
+    "description": "",
     "debug": true,
     "streamingDistance": 400,
     "migrationDistance": 150,
     "timeout": 1,
     "announceRetryErrorDelay": 10000,
     "announceRetryErrorAttempts": 50,
-    "modules": [
-        "js-module"
-    ],
-    "resources": [
-        "webviews",
-        "core"
-    ],
-    "tags": [
-        "athena",
-        "framework",
-        "version",
-        "3"
-    ],
+    "modules": ["js-module"],
+    "resources": ["webviews", "core"],
+    "tags": ["", "", "", ""],
     "useEarlyAuth": false,
     "earlyAuthUrl": null,
     "useCdn": false,
