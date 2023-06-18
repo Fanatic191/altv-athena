@@ -2,8 +2,8 @@ import alt from 'alt-server';
 import * as Athena from '@AthenaServer/api';
 
 Athena.commands.register(
-    'setdimension',
-    '/setdimension [id] [dimension]',
+    'setdim',
+    '/setdim [id] [dimension]',
     ['admin'],
     (player: alt.Player, id: string, dimension: string) => {
         const target = Athena.systems.identifier.getPlayer(id);

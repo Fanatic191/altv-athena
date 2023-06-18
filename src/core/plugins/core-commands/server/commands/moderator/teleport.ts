@@ -24,19 +24,24 @@ Athena.commands.register('goto', '/goto [id]', ['admin'], async (player: alt.Pla
     Athena.player.safe.setPosition(player, target.pos.x + 1, target.pos.y, target.pos.z);
 });
 
-Athena.commands.register('tpwp', '/tpwp [id]', ['admin'], async (player: alt.Player, id: string | undefined) => {
-    if (!player.currentWaypoint) {
-        Athena.player.emit.message(player, `Set a waypoint first.`);
-        return;
-    }
+Athena.commands.register(
+    'bliptp',
+    'Kijelölt helyre portálás',
+    ['admin'],
+    async (player: alt.Player, id: string | undefined) => {
+        if (!player.currentWaypoint) {
+            Athena.player.emit.message(player, `Set a waypoint first.`);
+            return;
+        }
 
-    Athena.player.safe.setPosition(
-        player,
-        player.currentWaypoint.x,
-        player.currentWaypoint.y,
-        player.currentWaypoint.z,
-    );
-});
+        Athena.player.safe.setPosition(
+            player,
+            player.currentWaypoint.x,
+            player.currentWaypoint.y,
+            player.currentWaypoint.z,
+        );
+    },
+);
 
 Athena.commands.register(
     'coords',
@@ -52,7 +57,7 @@ Athena.commands.register(
     },
 );
 
-Athena.commands.register('getcar', '/getcar [id]', ['admin'], async (player: alt.Player, id: string) => {
+Athena.commands.register('getveh', '/getveh [id]', ['admin'], async (player: alt.Player, id: string) => {
     const tmpID = parseInt(id);
     if (isNaN(tmpID)) {
         return;
@@ -77,8 +82,8 @@ Athena.commands.register('getcar', '/getcar [id]', ['admin'], async (player: alt
 });
 
 Athena.commands.register(
-    'tpto',
-    '/tpto [partial_name]',
+    'goto2',
+    '/goto2 [partial_name]',
     ['admin'],
     async (player: alt.Player, partial_name: string) => {
         if (!partial_name) {
@@ -106,8 +111,8 @@ Athena.commands.register(
 );
 
 Athena.commands.register(
-    'tphere',
-    '/tphere [partial_name]',
+    'gethere2',
+    '/gethere2 [partial_name]',
     ['admin'],
     async (player: alt.Player, partial_name: string) => {
         if (!partial_name) {

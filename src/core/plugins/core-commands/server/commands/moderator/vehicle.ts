@@ -26,54 +26,47 @@ Athena.commands.register(
     },
 );
 
-Athena.commands.register(
-    'addvehicle',
-    '/addvehicle [model] - Adds an owned vehicle to self',
-    ['admin'],
-    (player: alt.Player, model: string) => {
-        if (!model) {
-            Athena.player.emit.message(player, `No model specified.`);
-            return;
-        }
+Athena.commands.register('mv', '/mv [model]', ['admin'], (player: alt.Player, model: string) => {
+    if (!model) {
+        Athena.player.emit.message(player, `No model specified.`);
+        return;
+    }
 
-        const data = Athena.document.character.get(player);
-        if (data.isDead) {
-            return;
-        }
+    const data = Athena.document.character.get(player);
+    if (data.isDead) {
+        return;
+    }
 
-        const fwd = Athena.utility.vector.getVectorInFrontOfPlayer(player, 5);
-        Athena.vehicle.add.toPlayer(player, model, fwd);
-    },
-);
+    const fwd = Athena.utility.vector.getVectorInFrontOfPlayer(player, 5);
+    Athena.vehicle.add.toPlayer(player, model, fwd);
+    Athena.player.emit.message(player, `Sikeresen létrehoztad az autót: ${model}`);
+    alt.logWarning(`${player} létrehozott egy ${model}-t.`);
+});
 
-Athena.commands.register(
-    'vehiclerepair',
-    '/vehiclerepair - Repairs the nearest vehicle',
-    ['admin'],
-    (player: alt.Player) => {
-        const vehicle = player.vehicle ? player.vehicle : Athena.utility.closest.getClosestVehicle(player.pos);
+Athena.commands.register('fixveh', '', ['admin'], (player: alt.Player) => {
+    const vehicle = player.vehicle ? player.vehicle : Athena.utility.closest.getClosestVehicle(player.pos);
 
-        if (!vehicle) {
-            Athena.player.emit.message(player, 'No spawned vehicle.');
-            return;
-        }
+    if (!vehicle) {
+        Athena.player.emit.message(player, 'No spawned vehicle.');
+        return;
+    }
 
-        if (Athena.utility.vector.distance(player.pos, vehicle.pos) > 4 && !player.vehicle) {
-            Athena.player.emit.message(player, 'No vehicle in range.');
-            return;
-        }
+    if (Athena.utility.vector.distance(player.pos, vehicle.pos) > 4 && !player.vehicle) {
+        Athena.player.emit.message(player, 'No vehicle in range.');
+        return;
+    }
 
-        Athena.vehicle.damage.repair(vehicle);
-        Athena.vehicle.controls.updateLastUsed(vehicle);
-        Athena.vehicle.controls.update(vehicle);
+    Athena.vehicle.damage.repair(vehicle);
+    Athena.vehicle.controls.updateLastUsed(vehicle);
+    Athena.vehicle.controls.update(vehicle);
 
-        const hash = typeof vehicle.model === 'number' ? vehicle.model : alt.hash(vehicle.model);
+    const hash = typeof vehicle.model === 'number' ? vehicle.model : alt.hash(vehicle.model);
 
-        let vehInfo = Athena.utility.hashLookup.vehicle.hash(hash);
+    let vehInfo = Athena.utility.hashLookup.vehicle.hash(hash);
 
-        Athena.player.emit.message(player, `${vehInfo.displayName} got repaired.`);
-    },
-);
+    Athena.player.emit.message(player, `${vehInfo.displayName} got repaired.`);
+    alt.logWarning(`${player} megjavította a(z): ${vehInfo.displayName}`);
+});
 
 // The setLivery command has two possible commands that call both the same function. This is needed since it's not possible anymore to declare more than one name like in V4.
 
@@ -198,7 +191,7 @@ Athena.commands.register(
 );
 
 Athena.commands.register(
-    'fullTuneVehicle',
+    'ft',
     LocaleController.get(LOCALE_KEYS.COMMAND_FULL_TUNE_VEHICLE, '/fullTuneVehicle'),
     ['admin'],
     (player: alt.Player) => {
@@ -244,8 +237,8 @@ Athena.commands.register(
 );
 
 Athena.commands.register(
-    'tunevehicle',
-    '/tunevehicle [modID] [value] - Sets the specified Mod to the given value',
+    'modveh',
+    '/modveh [modID] [value]',
     ['admin'],
     (player: alt.Player, id: string, value: string) => {
         const vehicle = player.vehicle ? player.vehicle : Athena.utility.closest.getClosestVehicle(player.pos);

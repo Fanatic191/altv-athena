@@ -13,8 +13,8 @@ function finishSetArmour(target: alt.Player, value: number) {
 }
 
 Athena.commands.register(
-    'sethealth',
-    '/sethealth [value] [id]',
+    'sethp',
+    '',
     ['admin'],
     (player: alt.Player, value: string = '100', id: string | null = null) => {
         if (isNaN(parseInt(value))) {
@@ -47,8 +47,8 @@ Athena.commands.register(
 );
 
 Athena.commands.register(
-    'setarmour',
-    '/setarmour [value] [id]',
+    'armour',
+    '',
     ['admin'],
     (player: alt.Player, value: string = '100', id: string | null = null) => {
         if (isNaN(parseInt(value))) {

@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CVehicleModelInfoVariation>
+  <variationData>
+			<Item>
+      <modelName>coquette4</modelName>
+      <colors>
+        <Item>
+          <indices content="char_array">
+            112
+            35 
+            112 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+		 <Item>
+          <indices content="char_array">
+            0
+            0 
+            50 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+		 <Item>
+          <indices content="char_array">
+            11
+            11
+            92 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+		 <Item>
+          <indices content="char_array">
+            23
+            23
+            98 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+		 <Item>
+          <indices content="char_array">
+            33
+            33
+            33 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+		 <Item>
+          <indices content="char_array">
+            49
+            49 
+            53 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+		<Item>
+          <indices content="char_array">
+            74
+            74 
+            63 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+		 <Item>
+          <indices content="char_array">
+            20
+            20 
+            72 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+      </colors>
+      <kits>
+        <Item>0_default_modkit</Item>
+      </kits>
+      <windowsWithExposedEdges />
+      <plateProbabilities>
+        <Probabilities>
+          <Item>
+            <Name>Standard White</Name>
+            <Value value="100" />
+          </Item>
+        </Probabilities>
+      </plateProbabilities>
+      <lightSettings value="151" />
+      <sirenSettings value="0" />
+    </Item>
+					<Item>
+      <modelName>coquette42</modelName>
+      <colors>
+        <Item>
+          <indices content="char_array">
+            112
+            35 
+            112 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+		 <Item>
+          <indices content="char_array">
+            0
+            0 
+            50 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+		 <Item>
+          <indices content="char_array">
+            11
+            11
+            92 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+		 <Item>
+          <indices content="char_array">
+            23
+            23
+            98 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+		 <Item>
+          <indices content="char_array">
+            33
+            33
+            33 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+		 <Item>
+          <indices content="char_array">
+            49
+            49 
+            53 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+		<Item>
+          <indices content="char_array">
+            74
+            74 
+            63 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+		 <Item>
+          <indices content="char_array">
+            20
+            20 
+            72 
+            156 
+          </indices>
+          <liveries/>
+        </Item>
+      </colors>
+      <kits>
+        <Item>0_default_modkit</Item>
+      </kits>
+      <windowsWithExposedEdges />
+      <plateProbabilities>
+        <Probabilities>
+          <Item>
+            <Name>Standard White</Name>
+            <Value value="100" />
+          </Item>
+        </Probabilities>
+      </plateProbabilities>
+      <lightSettings value="151" />
+      <sirenSettings value="0" />
+    </Item>
+		 <Item>
+      <modelName>policecoq42</modelName>
+      <colors>
+        <Item>
+          <indices>
+            <Item value="0" />
+            <Item value="0" />
+            <Item value="11" />
+            <Item value="156" />
+          </indices>
+        </Item>
+        <Item>
+          <indices>
+            <Item value="2" />
+            <Item value="0" />
+            <Item value="134" />
+            <Item value="156" />
+          </indices>
+        </Item>
+        <Item>
+          <indices>
+            <Item value="75" />
+            <Item value="0" />
+            <Item value="157" />
+            <Item value="156" />
+          </indices>
+        </Item>
+        <Item>
+          <indices>
+            <Item value="7" />
+            <Item value="0" />
+            <Item value="134" />
+            <Item value="156" />
+          </indices>
+        </Item>
+        <Item>
+          <indices>
+            <Item value="34" />
+            <Item value="0" />
+            <Item value="45" />
+            <Item value="156" />
+          </indices>
+        </Item>
+        <Item>
+          <indices>
+            <Item value="0" />
+            <Item value="0" />
+            <Item value="2" />
+            <Item value="156" />
+          </indices>
+        </Item>
+      </colors>
+      <kits>
+        <Item>0_default_modkit</Item>
+      </kits>
+      <windowsWithExposedEdges />
+      <plateProbabilities>
+        <Probabilities>
+          <Item>
+            <Name>police guv plate</Name>
+            <Value value="100" />
+          </Item>
+        </Probabilities>
+      </plateProbabilities>
+      <lightSettings value="151" />
+      <sirenSettings value="232" />
+    </Item>
+				 <Item>
+      <modelName>policecoq4</modelName>
+      <colors>
+         <Item>
+          <indices>
+            <Item value="134" />
+            <Item value="134" />
+            <Item value="0" />
+            <Item value="156" />
+          </indices>
+          <liveries/>
+        </Item>
+      </colors>
+      <kits>
+        <Item>0_default_modkit</Item>
+      </kits>
+      <windowsWithExposedEdges />
+      <plateProbabilities>
+        <Probabilities>
+          <Item>
+            <Name>police guv plate</Name>
+            <Value value="100" />
+          </Item>
+        </Probabilities>
+      </plateProbabilities>
+      <lightSettings value="151" />
+      <sirenSettings value="131" />
+    </Item>
+						 <Item>
+      <modelName>lssheriffcoq4</modelName>
+      <colors>
+         <Item>
+          <indices>
+            <Item value="134" />
+            <Item value="134" />
+            <Item value="0" />
+            <Item value="156" />
+          </indices>
+          <liveries/>
+        </Item>
+      </colors>
+      <kits>
+        <Item>0_default_modkit</Item>
+      </kits>
+      <windowsWithExposedEdges />
+      <plateProbabilities>
+        <Probabilities>
+          <Item>
+            <Name>police guv plate</Name>
+            <Value value="100" />
+          </Item>
+        </Probabilities>
+      </plateProbabilities>
+      <lightSettings value="151" />
+      <sirenSettings value="131" />
+    </Item>
+		<Item>
+      <modelName>hwaycoq4</modelName>
+      <colors>
+         <Item>
+          <indices>
+            <Item value="134" />
+            <Item value="134" />
+            <Item value="0" />
+            <Item value="156" />
+          </indices>
+          <liveries/>
+        </Item>
+      </colors>
+      <kits>
+        <Item>0_default_modkit</Item>
+      </kits>
+      <windowsWithExposedEdges />
+      <plateProbabilities>
+        <Probabilities>
+          <Item>
+            <Name>police guv plate</Name>
+            <Value value="100" />
+          </Item>
+        </Probabilities>
+      </plateProbabilities>
+      <lightSettings value="151" />
+      <sirenSettings value="350" />
+    </Item>
+				<Item>
+      <modelName>hwaycoq42</modelName>
+      <colors>
+         <Item>
+          <indices>
+            <Item value="134" />
+            <Item value="134" />
+            <Item value="0" />
+            <Item value="156" />
+          </indices>
+          <liveries/>
+        </Item>
+      </colors>
+      <kits>
+        <Item>0_default_modkit</Item>
+      </kits>
+      <windowsWithExposedEdges />
+      <plateProbabilities>
+        <Probabilities>
+          <Item>
+            <Name>police guv plate</Name>
+            <Value value="100" />
+          </Item>
+        </Probabilities>
+      </plateProbabilities>
+      <lightSettings value="151" />
+      <sirenSettings value="351" />
+    </Item>
+  </variationData>
+</CVehicleModelInfoVariation>

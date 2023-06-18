@@ -9,5 +9,5 @@ export const DiscordAuthConfig = {
     // Add a redirect option
     // specify: http://127.0.0.1
     // Save changes
-    APPLICATION_ID: '1090747667317010532',
+    APPLICATION_ID: '1097552171244978267',
 };

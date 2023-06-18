@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<CPackFileMetaData>
+  <MapDataGroups/>
+  <HDTxdBindingArray/>
+  <imapDependencies/>
+  <imapDependencies_2>
+    <Item>
+      <imapName>cube-park</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>v_seating_tables</Item>
+        <Item>v_bins</Item>
+        <Item>v_coin_op</Item>
+        <Item>v_traffic_lights</Item>
+        <Item>v_cacti</Item>
+        <Item>v_bush</Item>
+      </itypDepArray>
+    </Item>
+  </imapDependencies_2>
+  <itypDependencies_2/>
+  <Interiors/>
+</CPackFileMetaData>

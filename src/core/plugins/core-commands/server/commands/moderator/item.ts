@@ -2,7 +2,7 @@ import alt from 'alt-server';
 import * as Athena from '@AthenaServer/api';
 
 Athena.commands.register(
-    'additem',
+    'giveitem',
     '/additem [partialName] [amount] [version?]',
     ['admin'],
     async (player: alt.Player, partialName: string, amount: string, version: string | undefined) => {
@@ -54,7 +54,7 @@ Athena.commands.register(
 );
 
 Athena.commands.register(
-    'removeitem',
+    'delitem',
     '/removeitem [dbName] [amount] [version?]',
     ['admin'],
     async (player: alt.Player, dbName: string, amount: string, version: string | undefined) => {
