@@ -3,13 +3,14 @@ export const CHAT_CONFIG = {
         // Maximum range for another player to speak to another player
         range: 35,
         commands: {
-            oocDistance: 35,
+            oocDistance: 15,
             meDistance: 35,
             doDistance: 35,
             lowDistance: 10,
             whisperDistance: 5,
             oocColour: `{656565}`, // OOC Color
             roleplayColour: `{C39ADD}`, // Roleplay Color
+            doColour: `{f9227d}`, // do color
             lowColour: `{d3d3d3}`, // Low Color
             whisperColour: `{e6e6ce}`, // Whisper Color
         },
@@ -20,17 +21,17 @@ export const CHAT_CONFIG = {
         // Show message indexes
         messageIndexes: false,
         // Default by showing timestamps
-        timestamps: false,
+        timestamps: true,
         // Total messages to show on-screen
-        display: 6,
+        display: 14,
         // Message length
-        length: 128,
+        length: 250,
     },
     style: {
         // Max width of the message box
         'max-width': '400px',
         // Font size of the individual message
-        'font-size': '13px',
+        'font-size': '14px',
         // The boldness of the message
         'font-weight': 600,
         // The transparency of a message

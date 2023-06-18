@@ -6,6 +6,37 @@ import { VehicleState } from '@AthenaShared/interfaces/vehicleState';
 import IVehicleTuning from '@AthenaShared/interfaces/vehicleTuning';
 import IVehicleMod from '@AthenaShared/interfaces/vehicleMod';
 import VehicleExtra from '@AthenaShared/interfaces/vehicleExtra';
+import Database from '@stuyk/ezmongodb';
+
+Athena.systems.messenger.commands.register(
+    'dv',
+    '/dv (amibe ülsz!!!) - Jármű végleges törlése!!!',
+    ['admin'],
+    async (player: alt.Player) => {
+        if (!player || !player.valid) {
+            return;
+        }
+
+        // This is an alt:V ID btw. Not the Database ID, or anything else.
+        const vehicleData = Athena.document.vehicle.get(player.vehicle);
+
+        if (!vehicleData) {
+            Athena.player.emit.message(player, 'Nem ülsz járműben.');
+            return;
+        }
+
+        if (vehicleData) {
+            const isDeleted = await Database.deleteById(vehicleData._id.toString(), 'vehicles');
+
+            alt.log(`~r~Az ~w~autó ~g~törlése ~w~=> ~g~${isDeleted}`);
+            Athena.player.emit.message(player, 'A járművet sikeresen törölted.');
+
+            try {
+                player.vehicle.destroy();
+            } catch (err) {}
+        }
+    },
+);
 
 Athena.commands.register(
     'tempvehicle',
