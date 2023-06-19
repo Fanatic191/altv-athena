@@ -1,4 +1,4 @@
 export const LOCALE_DEATH = {
-    UNTIL_RESPAWN: 'Until Respawn',
-    PRESS_KEY_TO_RESPAWN: 'Tap E to Respawn',
+    UNTIL_RESPAWN: 'újraéledésig',
+    PRESS_KEY_TO_RESPAWN: 'Nyomd meg az E betűt az újraéledéshez.',
 };
