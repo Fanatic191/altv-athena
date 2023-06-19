@@ -29,9 +29,9 @@ const Internal = {
 
         for (let i = 0; i < HOSPITALS.length; i++) {
             Athena.controllers.blip.append({
-                text: 'Hospital',
+                text: 'Kórház',
                 color: 6,
-                sprite: 153,
+                sprite: 61,
                 scale: 1,
                 shortRange: true,
                 pos: HOSPITALS[i],
