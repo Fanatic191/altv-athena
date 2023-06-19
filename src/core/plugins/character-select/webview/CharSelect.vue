@@ -3,16 +3,10 @@
         <div class="selection">
             <div class="stack" v-if="!isDeleting">
                 <div class="options" v-if="!isSelecting">
-                    <div @mouseover="hover" @click="selectCharacter" class="item hover-blue"># Select</div>
-                    <div @mouseover="hover" @click="deleteCharacter" class="item hover-red" v-if="characterCount >= 2">
-                        x Delete
-                    </div>
-                    <div @mouseover="hover" @click="newCharacter" class="item hover-green">+ New</div>
+                    <div @mouseover="hover" @click="selectCharacter" class="item hover-blue"># Kiválaszt</div>
                 </div>
                 <div class="options" v-else="!isSelecting">
-                    <div class="item-no-hover grey--text text--darken-1"># Select</div>
-                    <div class="item-no-hover grey--text text--darken-1" v-if="characterCount >= 2">x Delete</div>
-                    <div class="item-no-hover grey--text text--darken-1">+ New</div>
+                    <div class="item-no-hover grey--text text--darken-1"># Kiválaszt</div>
                 </div>
                 <div class="split" v-if="!isSelecting">
                     <div class="left-column">
@@ -45,7 +39,6 @@
         </div>
     </div>
 </template>
-
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
 import Icon from '@ViewComponents/Icon.vue';
