@@ -5,8 +5,8 @@
     "port": 7788,
     "players": 512,
     "password": null,
-    "token": null,
-    "announce": false,
+    "token": "dsuDzGV4yc7z4FIP8w7XurAAFOnvOy2pPyOxokyJvFiLpKV9RVN4BAQtQolIBox78K71hB0tI9Da9UK31/O1G8nqSSHtc+N7sGtjGZ4n7evvnUC9N0W42JSr0qIzzRh3GYHSDb1Sio/hJ86B17kFhtlDPfVu3XeYXPI8pxjIOLdKxKJIkKoMdNyC520PZKpyeEOR7mzpHfE3W6QEZ0u+21TFiWf2Y6mslM/2QOpq6gE+q9CfgOWMV0AIHH23cpABuDH5hdrDiyxV8BHKNxLgRe4XqFfeOHXiUeBQVJc8rAiCUAtjByh9OENxWv3Okny9hu1JPF2MOcBjtEjc9GleSA==",
+    "announce": true,
     "gamemode": "Roleplay",
     "website": "",
     "language": "hu",
@@ -23,13 +23,5 @@
     "useEarlyAuth": false,
     "earlyAuthUrl": null,
     "useCdn": false,
-    "cdnUrl": null,
-    "voice": {
-        "bitrate": 64000,
-        "externalSecret": null,
-        "externalHost": null,
-        "externalPort": null,
-        "externalPublicHost": null,
-        "externalPublicPort": null
-    }
+    "cdnUrl": null
 }
