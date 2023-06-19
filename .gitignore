@@ -47,3 +47,4 @@ resources/core/**
 resources/webviews/**
 
 typedefs.d.ts
+configs/prod.json
