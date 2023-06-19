@@ -1,4 +1,5 @@
 import * as alt from 'alt-server';
+import * as Athena from '@AthenaServer/api';
 import { Config } from '../data/config/config';
 
 class SirenMastery {
