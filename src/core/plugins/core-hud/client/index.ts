@@ -9,9 +9,8 @@ import { VehicleData } from '../../../shared/information/vehicles';
 import { isVehicleType, VEHICLE_TYPE } from '../../../shared/enums/vehicleTypeFlags';
 import { SHARED_CONFIG } from '@AthenaShared/configurations/shared';
 import { KEY_BINDS } from '@AthenaShared/enums/keyBinds';
-import IHudComponent from '@AthenaPlugins/athena-plugin-hud/shared/interfaces/iHudComponent';
-import IClientInteraction from '@AthenaPlugins/athena-plugin-hud/shared/interfaces/iClientInteraction';
-// import { GPVoice } from '../../gp-voice/client/src/voice';
+import IHudComponent from '../shared/interfaces/iHudComponent';
+import IClientInteraction from '../shared/interfaces/iClientInteraction';
 
 const PAGE_NAME = 'Hud';
 const RegisteredComponents: { [key: string]: IHudComponent } = {};
@@ -31,7 +30,7 @@ export class HudView {
         // AthenaClient.systems.interaction.addInteractionCallback(HudView.addCustomInteraction);
         // Keybind Key: 112 (F2)
         AthenaClient.systems.hotkeys.add({
-            key: 113,
+            key: KEY_BINDS.HUD_SWITCH,
             description: 'Hud Switch',
             identifier: 'core-hud-hud-switch',
             keyDown: HudView.toggleKeyBind,

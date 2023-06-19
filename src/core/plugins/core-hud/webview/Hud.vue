@@ -51,12 +51,12 @@
             />
         </div> -->
         <div class="info-placement mb-4">
-            <!--    <Cash class="mb-2" :value="cash" />
+        <!--    <Cash class="mb-2" :value="cash" />
             <Bank class="mb-2" :value="bank" />
             <Time class="mb-2" :value="time" />-->
         </div>
         <div class="icon-placement">
-            <!--   <Water class="mb-2" :value="water" />
+          <!--   <Water class="mb-2" :value="water" />
             <Food class="mb-2" :value="food" />
             <Armour class="mb-2" :value="armour" />
             <Health class="mb-2" :value="health" />-->
@@ -102,7 +102,7 @@ export default defineComponent({
     // Used to add Custom Components
     components: {
         Icon: defineAsyncComponent(() => import('@ViewComponents/Icon.vue')),
-        //  Armour: defineAsyncComponent(() => import('./components/Armour.vue')),
+    //  Armour: defineAsyncComponent(() => import('./components/Armour.vue')),
         Cash: defineAsyncComponent(() => import('./components/Cash.vue')),
         Food: defineAsyncComponent(() => import('./components/Food.vue')),
         // Microphone: defineAsyncComponent(() => import('./components/Microphone.vue')),
@@ -144,7 +144,7 @@ export default defineComponent({
             seatbelt: false,
             isMetric: true,
             isInVehicle: false,
-            unit: 'KM/H',
+            unit: 'KN',
             interactions: [] as Array<{ keyPress: string; description: string }>,
             updateCount: 0,
             range: 1,

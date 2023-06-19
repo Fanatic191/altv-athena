@@ -1,10 +1,11 @@
-<!--<template>
+<template>
     <div class="stat-wrapper">
         <div class="split space-between">
             <div class="bar">
-                <Icon :shadow="true" class="stat-icon" icon="icon-microphone" :size="18" v-if="value" />
-                <Icon :shadow="true" class="stat-icon" icon="icon-microphone-slash" :size="18" v-else />
-                <div class="fill" :style="getFill" />
+                <Icon :shadow="false" class="stat-icon" icon="icon-local_gas_station" :size="18"></Icon>
+                <div class="fill" :style="getFill">
+                    <img class="oil-slick" :src="ResolvePath(`@plugins/images/core-hud/oil.png`)" />
+                </div>
                 <div class="bar-shadow"></div>
             </div>
         </div>
@@ -13,8 +14,9 @@
 
 <script lang="ts">
 import { defineComponent, defineAsyncComponent } from 'vue';
+import ResolvePath from '@utility/pathResolver';
 
-const ComponentName = 'Microphone';
+const ComponentName = 'Fuel';
 export default defineComponent({
     name: ComponentName,
     components: {
@@ -23,12 +25,19 @@ export default defineComponent({
     props: {
         value: {
             type: Number,
-            default: 99,
+            default: 50,
         },
+    },
+    methods: {
+        ResolvePath,
     },
     computed: {
         getFill() {
-          return `height: ${this.value}% !important; background-color: #447c44;`;
+            if (this.value >= 99) {
+                return `height: ${this.value}% !important; animation: unset !important;`;
+            }
+
+            return `height: ${this.value}% !important`;
         },
     },
 });
@@ -90,12 +99,40 @@ export default defineComponent({
 }
 
 .fill {
+    display: flex;
     position: absolute;
-    background: #447c44;
+    background: transparent;
     z-index: 25;
     min-width: 65px;
+    max-width: 65px;
     box-sizing: border-box;
     bottom: 0px;
+    animation: rotate 5s infinite ease-in-out;
     outline: 1px solid transparent;
+    overflow: hidden !important;
+    justify-content: center;
+    align-items: center;
 }
-</style>-->
+
+.oil-slick {
+    width: 150%;
+    height: 150%;
+    animation: rotate 7s infinite alternate;
+    object-fit: cover;
+}
+
+@keyframes rotate {
+    0% {
+        transform: translateY(0px);
+    }
+    25% {
+        transform: translateY(2px) rotate(-5deg);
+    }
+    75% {
+        transform: translateY(2px) rotate(5deg);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+</style>
