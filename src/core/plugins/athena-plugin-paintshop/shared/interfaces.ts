@@ -2,7 +2,6 @@ import * as alt from 'alt-shared';
 import { RGB } from '../shared/rgb';
 
 export interface iPaintshopSync {
-    [x: string]: any;
     color: number | RGB;
     color2: number | RGB;
     pearl: number;
