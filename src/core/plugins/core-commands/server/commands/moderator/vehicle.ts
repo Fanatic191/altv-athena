@@ -7,6 +7,7 @@ import IVehicleTuning from '@AthenaShared/interfaces/vehicleTuning';
 import IVehicleMod from '@AthenaShared/interfaces/vehicleMod';
 import VehicleExtra from '@AthenaShared/interfaces/vehicleExtra';
 import Database from '@stuyk/ezmongodb';
+import { NotifyController } from '@AthenaPlugins/fnky-notifcations/server';
 
 Athena.systems.messenger.commands.register(
     'dv',
@@ -21,7 +22,15 @@ Athena.systems.messenger.commands.register(
         const vehicleData = Athena.document.vehicle.get(player.vehicle);
 
         if (!vehicleData) {
-            Athena.player.emit.message(player, 'Nem ülsz járműben.');
+            // Athena.player.emit.message(player, 'Nem ülsz járműben.');
+            NotifyController.send(
+                player,
+                4,
+                7,
+                'Sikertelen',
+                'A jármű törlése <b><font color="#CC394F">sikertelen</b></font>! Nem ülsz benne..',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
         }
 
@@ -29,7 +38,15 @@ Athena.systems.messenger.commands.register(
             const isDeleted = await Database.deleteById(vehicleData._id.toString(), 'vehicles');
 
             alt.log(`~r~Az ~w~autó ~g~törlése ~w~=> ~g~${isDeleted}`);
-            Athena.player.emit.message(player, 'A járművet sikeresen törölted.');
+            // Athena.player.emit.message(player, 'A járművet sikeresen törölted.');
+            NotifyController.send(
+                player,
+                2,
+                7,
+                'Sikeres',
+                'Az autó, amiben ültél, <b><font color="#3DBA39">sikeresen törölve.</b></font>',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
 
             try {
                 player.vehicle.destroy();
@@ -54,12 +71,28 @@ Athena.commands.register(
         }
 
         player.setIntoVehicle(vehicle, Athena.vehicle.shared.SEAT.DRIVER);
+        NotifyController.send(
+            player,
+            3,
+            7,
+            'Figyelmeztetés',
+            '<b><font color="#00ff00">Sikeres</b></font> létrehozás. Figyelem, az autó kiszállás után <b><font color="#ff0000">TÖRLŐDIK!</b></font>',
+        );
+        NotifyController.clearAll(player); // to clear history or/and notifications on screen
     },
 );
 
 Athena.commands.register('mv', '/mv [model]', ['admin'], (player: alt.Player, model: string) => {
     if (!model) {
         Athena.player.emit.message(player, `No model specified.`);
+        NotifyController.send(
+            player,
+            2,
+            7,
+            'Sikeres',
+            `${player} <b><font color="#3DBA39">sikeresen </b></font> létrehozott egy ${model}-t.`,
+        );
+        NotifyController.clearAll(player); // to clear history or/and notifications on screen
         return;
     }
 
@@ -67,23 +100,47 @@ Athena.commands.register('mv', '/mv [model]', ['admin'], (player: alt.Player, mo
     if (data.isDead) {
         return;
     }
-
+    const name = Athena.database.collections.Characters.indexOf('name');
     const fwd = Athena.utility.vector.getVectorInFrontOfPlayer(player, 5);
     Athena.vehicle.add.toPlayer(player, model, fwd);
-    Athena.player.emit.message(player, `Sikeresen létrehoztad az autót: ${model}`);
+    // Athena.player.emit.message(player, `Sikeresen létrehoztad az autót: ${model}`);
     alt.logWarning(`${player} létrehozott egy ${model}-t.`);
+    NotifyController.send(
+        player,
+        2,
+        7,
+        'Sikeres',
+        `${name} <b><font color="#3DBA39">sikeresen </b></font> létrehozott egy ${model}-t.`,
+    );
+    NotifyController.clearAll(player); // to clear history or/and notifications on screen
 });
 
 Athena.commands.register('fixveh', '', ['admin'], (player: alt.Player) => {
     const vehicle = player.vehicle ? player.vehicle : Athena.utility.closest.getClosestVehicle(player.pos);
 
     if (!vehicle) {
-        Athena.player.emit.message(player, 'No spawned vehicle.');
+        // Athena.player.emit.message(player, 'No spawned vehicle.');
+        NotifyController.send(
+            player,
+            4,
+            5,
+            'Sikertelen',
+            '<b><font color="#3DBA39">Hiba. Nincs érvényes autó!</b></font>',
+        );
+        NotifyController.clearAll(player); // to clear history or/and notifications on screen
         return;
     }
 
     if (Athena.utility.vector.distance(player.pos, vehicle.pos) > 4 && !player.vehicle) {
-        Athena.player.emit.message(player, 'No vehicle in range.');
+        // Athena.player.emit.message(player, 'No vehicle in range.');
+        NotifyController.send(
+            player,
+            3,
+            5,
+            'Figyelmeztetés',
+            'Nincs a közeledben jármű. <b><font color="#3DBA39">Ülj bele az autóba, amit javítani szeretnél!</b></font>',
+        );
+        NotifyController.clearAll(player); // to clear history or/and notifications on screen
         return;
     }
 
@@ -95,7 +152,10 @@ Athena.commands.register('fixveh', '', ['admin'], (player: alt.Player) => {
 
     let vehInfo = Athena.utility.hashLookup.vehicle.hash(hash);
 
-    Athena.player.emit.message(player, `${vehInfo.displayName} got repaired.`);
+    // Athena.player.emit.message(player, `${vehInfo.displayName} got repaired.`);
+    NotifyController.send(player, 2, 5, 'Sikeres', 'A jármű <b><font color="#3DBA39">sikeresen</b></font> megjavítva.');
+    NotifyController.clearAll(player); // to clear history or/and notifications on screen
+
     alt.logWarning(`${player} megjavította a(z): ${vehInfo.displayName}`);
 });
 
@@ -124,7 +184,15 @@ function setLivery(player: alt.Player, livery: string) {
     }
 
     if (Athena.utility.vector.distance(player.pos, vehicle.pos) > 4 && !player.vehicle) {
-        Athena.player.emit.message(player, 'No vehicle in range.');
+        // Athena.player.emit.message(player, 'No vehicle in range.');
+        NotifyController.send(
+            player,
+            3,
+            5,
+            'Figyelmeztetés',
+            'Nincs a közeledben jármű. <b><font color="#3DBA39">Ülj bele az autóba, amit javítani szeretnél!</b></font>',
+        );
+        NotifyController.clearAll(player); // to clear history or/and notifications on screen
         return;
     }
 
@@ -138,7 +206,15 @@ function setLivery(player: alt.Player, livery: string) {
     }
 
     if (isNaN(parseInt(livery))) {
-        Athena.player.emit.message(player, `Livery passed was not a number.`);
+        // Athena.player.emit.message(player, `Livery passed was not a number.`);
+        NotifyController.send(
+            player,
+            3,
+            5,
+            'Figyelmeztetés',
+            'Nem megfelelő matrica <b><font color="#3DBA39">azonosító. CSAK szám lehet!</b></font>',
+        );
+        NotifyController.clearAll(player); // to clear history or/and notifications on screen
         return;
     }
 
@@ -154,7 +230,15 @@ function setLivery(player: alt.Player, livery: string) {
 
     let vehInfo = Athena.utility.hashLookup.vehicle.hash(hash);
 
-    Athena.player.emit.message(player, `Livery of ${vehInfo.displayName} was set to ID ${livery}.`);
+    // Athena.player.emit.message(player, `Livery of ${vehInfo.displayName} was set to ID ${livery}.`);
+    NotifyController.send(
+        player,
+        2,
+        5,
+        'Sikeres',
+        `A ${vehInfo.displayName} matricája mostantól a(z) <b><font color="#3DBA39">${livery}</b></font>.`,
+    );
+    NotifyController.clearAll(player); // to clear history or/and notifications on screen
 }
 
 Athena.commands.register(
@@ -180,12 +264,28 @@ function setVehicleDirtlevel(player: alt.Player, dirtLevel: string) {
     }
 
     if (Athena.utility.vector.distance(player.pos, vehicle.pos) > 4 && !player.vehicle) {
-        Athena.player.emit.message(player, 'No vehicle in range.');
+        // Athena.player.emit.message(player, 'No vehicle in range.');
+        NotifyController.send(
+            player,
+            3,
+            5,
+            'Figyelmeztetés',
+            'Nincs a közeledben jármű. <b><font color="#3DBA39">Ülj bele az autóba, amit szeretnél beállítani!</b></font>',
+        );
+        NotifyController.clearAll(player); // to clear history or/and notifications on screen
         return;
     }
 
     if (isNaN(parseInt(dirtLevel))) {
-        Athena.player.emit.message(player, `Dirt level passed was not a number.`);
+        // Athena.player.emit.message(player, `Dirt level passed was not a number.`);
+        NotifyController.send(
+            player,
+            3,
+            5,
+            'Figyelmeztetés',
+            'Nem megfelelő matrica <b><font color="#3DBA39">azonosító. CSAK szám lehet!</b></font>',
+        );
+        NotifyController.clearAll(player); // to clear history or/and notifications on screen
         return;
     }
 
@@ -199,7 +299,15 @@ function setVehicleDirtlevel(player: alt.Player, dirtLevel: string) {
 
     let vehInfo = Athena.utility.hashLookup.vehicle.hash(hash);
 
-    Athena.player.emit.message(player, `Dirtlevel of ${vehInfo.displayName} was set to ID ${dirtLevel}.`);
+    // Athena.player.emit.message(player, `Dirtlevel of ${vehInfo.displayName} was set to ID ${dirtLevel}.`);
+    NotifyController.send(
+        player,
+        2,
+        5,
+        'Sikeres',
+        `A ${vehInfo.displayName} matricája mostantól a(z) <b><font color="#3DBA39">${dirtLevel}</b></font>.`,
+    );
+    NotifyController.clearAll(player); // to clear history or/and notifications on screen
 }
 
 Athena.commands.register(
@@ -234,7 +342,15 @@ Athena.commands.register(
         }
 
         if (Athena.utility.vector.distance(player.pos, vehicle.pos) > 4 && !player.vehicle) {
-            Athena.player.emit.message(player, 'No vehicle in range.');
+            // Athena.player.emit.message(player, 'No vehicle in range.');
+            NotifyController.send(
+                player,
+                3,
+                7,
+                'Figyelmeztetés',
+                'Nincs a közeledben <b><font color="#FFE13A">jármű</b></font>',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
         }
 
@@ -280,7 +396,15 @@ Athena.commands.register(
         }
 
         if (Athena.utility.vector.distance(player.pos, vehicle.pos) > 4 && !player.vehicle) {
-            Athena.player.emit.message(player, 'No vehicle in range.');
+            // Athena.player.emit.message(player, 'No vehicle in range.');
+            NotifyController.send(
+                player,
+                3,
+                7,
+                'Figyelmeztetés',
+                'Nincs a közeledben <b><font color="#FFE13A">jármű</b></font>',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
         }
 
@@ -294,7 +418,15 @@ Athena.commands.register(
         }
 
         if (isNaN(parseInt(id)) || isNaN(parseInt(value))) {
-            Athena.player.emit.message(player, `Id, or value was not a number.`);
+            // Athena.player.emit.message(player, `Id, or value was not a number.`);
+            NotifyController.send(
+                player,
+                3,
+                5,
+                'Figyelmeztetés',
+                'Nem megfelelő tuning <b><font color="#3DBA39">azonosító. CSAK szám lehet!</b></font>',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
         }
 
@@ -310,7 +442,15 @@ Athena.commands.register(
 
         let vehInfo = Athena.utility.hashLookup.vehicle.hash(hash);
 
-        Athena.player.emit.message(player, `Mod ID: ${id} of ${vehInfo.displayName} was set to ${value}.`);
+        // Athena.player.emit.message(player, `Mod ID: ${id} of ${vehInfo.displayName} was set to ${value}.`);
+        NotifyController.send(
+            player,
+            2,
+            5,
+            'Sikeres',
+            `A ${vehInfo.displayName} ${id} tuningja mostantól a(z) <b><font color="#3DBA39">${value}</b></font>.`,
+        );
+        NotifyController.clearAll(player); // to clear history or/and notifications on screen
     },
 );
 

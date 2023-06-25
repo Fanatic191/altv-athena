@@ -4,9 +4,10 @@ import * as native from 'natives';
 import { SHARED_CONFIG } from '@AthenaShared/configurations/shared';
 import { SYSTEM_EVENTS } from '@AthenaShared/enums/system';
 import { onTicksStart } from './onTicksStart';
+import { drawText2D } from '@AthenaClient/screen/text';
 
 alt.on('connectionComplete', handleConnectionComplete);
-alt.setWatermarkPosition(4);
+alt.setWatermarkPosition(0);
 
 async function handleConnectionComplete() {
     native.destroyAllCams(true);
@@ -32,6 +33,9 @@ alt.everyTick(() => {
     }
     native.hideHudComponentThisFrame(8); // Vehicle Class
     native.hideHudComponentThisFrame(9); // Street Name
+    const color = new alt.RGBA(255, 255, 255, 150);
+    const position = new alt.Vector2(0.955, 0.97);
+    drawText2D('MonsterV, v0.0.6.0', position, 0.35, color);
 });
 
 function handleTick() {

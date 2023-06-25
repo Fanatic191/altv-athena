@@ -23,7 +23,7 @@ export function drawMissionText(text: string, duration: number | undefined = und
     }
     native.endTextCommandPrint(duration, true);
     timeoutId = alt.setTimeout(() => {
-        alt.setWatermarkPosition(4);
+        alt.setWatermarkPosition(0);
         timeoutId = undefined;
     }, duration);
 }
