@@ -3,7 +3,7 @@ import * as Athena from '@AthenaServer/api';
 import { LOCALE_KEYS } from '@AthenaShared/locale/languages/keys';
 import { LocaleController } from '@AthenaShared/locale/locale';
 import { WORLD_WEATHER } from '@AthenaPlugins/core-weather/shared/weather';
-import { World } from '../world';
+import { World } from '@AthenaPlugins/core-weather/server/src/world';
 
 export class WeatherCommands {
     static init() {

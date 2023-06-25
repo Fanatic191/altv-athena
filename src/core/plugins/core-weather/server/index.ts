@@ -1,7 +1,7 @@
 import alt from 'alt-server';
 import * as Athena from '@AthenaServer/api';
 import { WeatherCommands } from './src/commands/weatherCommands';
-import { World } from './src/world';
+import { World } from '@AthenaPlugins/core-weather/server/src/world';
 
 const PLUGIN_NAME = 'Athena Weather';
 
