@@ -7,7 +7,7 @@ import IVehicleTuning from '@AthenaShared/interfaces/vehicleTuning';
 import IVehicleMod from '@AthenaShared/interfaces/vehicleMod';
 import VehicleExtra from '@AthenaShared/interfaces/vehicleExtra';
 import Database from '@stuyk/ezmongodb';
-import { NotifyController } from '@AthenaPlugins/fnky-notifcations/server';
+import { NotifyController } from '@AthenaPlugins/fnky-notifications/server';
 
 Athena.systems.messenger.commands.register(
     'dv',

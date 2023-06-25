@@ -1,15 +1,32 @@
 import alt from 'alt-server';
 import * as Athena from '@AthenaServer/api';
 import Database from '@stuyk/ezmongodb';
+import { NotifyController } from '@AthenaPlugins/fnky-notifications/server';
 
 function finishSetHealth(target: alt.Player, value: number) {
     Athena.player.safe.addHealth(target, value, true);
-    Athena.player.emit.message(target, `Player health was set to ${value}`);
+    // Athena.player.emit.message(target, `Player health was set to ${value}`);
+    NotifyController.send(
+        target,
+        2,
+        7,
+        'Sikeres műívelet',
+        'A játékos életét <b><font color="#3DBA39">sikeresen</b></font> átállítottad.',
+    );
+    NotifyController.clearAll(target); // to clear history or/and notifications on screen
 }
 
 function finishSetArmour(target: alt.Player, value: number) {
     Athena.player.safe.addArmour(target, value, true);
-    Athena.player.emit.message(target, `Player armour was set to ${value}`);
+    //Athena.player.emit.message(target, `Player armour was set to ${value}`);
+    NotifyController.send(
+        target,
+        2,
+        7,
+        'Sikeres művelet',
+        'A játékos életét <b><font color="#3DBA39">sikeresen</b></font> átállítottad.',
+    );
+    NotifyController.clearAll(target); // to clear history or/and notifications on screen
 }
 
 Athena.commands.register(
@@ -39,6 +56,14 @@ Athena.commands.register(
         const target = Athena.systems.identifier.getPlayer(id);
         if (!target) {
             Athena.player.emit.message(player, 'Cannot find player with that ID.');
+            NotifyController.send(
+                player,
+                3,
+                7,
+                'Figyelmeztetés',
+                'A játékos a megadott ID-vel <b><font color="#3DBA39">nem létezik!</b></font>',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
         }
 
@@ -71,7 +96,15 @@ Athena.commands.register(
 
         const target = Athena.systems.identifier.getPlayer(id);
         if (!target) {
-            Athena.player.emit.message(player, 'Cannot find player with that ID.');
+            //Athena.player.emit.message(player, 'Cannot find player with that ID.');
+            NotifyController.send(
+                player,
+                3,
+                7,
+                'Figyelmeztetés',
+                'A játékos a megadott ID-vel <b><font color="#3DBA39">nem létezik!</b></font>',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
         }
 

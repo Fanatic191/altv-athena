@@ -12,3 +12,5 @@ NotifyController.clearAll(player); // to clear history or/and notifications on s
 
 NotifyController.send(player, 4, 7,'Hiba','Lorem ipsum dolor sit amet, adipiscing elit, <b><font color="#3DBA39">sed do eiusmod</b></font>');
 NotifyController.clearAll(player); // to clear history or/and notifications on screen
+
+import { NotifyController } from '@AthenaPlugins/fnky-notifications/server';

@@ -1,5 +1,6 @@
 import alt from 'alt-server';
 import * as Athena from '@AthenaServer/api';
+import { NotifyController } from '@AthenaPlugins/fnky-notifications/server';
 
 Athena.commands.register(
     'giveitem',
@@ -7,18 +8,42 @@ Athena.commands.register(
     ['admin'],
     async (player: alt.Player, partialName: string, amount: string, version: string | undefined) => {
         if (typeof partialName === 'undefined') {
-            Athena.player.emit.message(player, `Must specify a partialName to add an item.`);
+            // Athena.player.emit.message(player, `Must specify a partialName to add an item.`);
+            NotifyController.send(
+                player,
+                3,
+                7,
+                'Figyelmeztetés',
+                'Megkell határoznod a <b><font color="#3DBA39">nevét!</b></font>',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
         }
 
         if (typeof amount === 'undefined') {
-            Athena.player.emit.message(player, `Must specify an amount to add.`);
+            // Athena.player.emit.message(player, `Must specify an amount to add.`);
+            NotifyController.send(
+                player,
+                3,
+                7,
+                'Figyelmeztetés',
+                'Megkell határoznod a <b><font color="#3DBA39">mennyiséget!</b></font>',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
         }
 
         const actualAmount = parseInt(amount);
         if (isNaN(actualAmount)) {
-            Athena.player.emit.message(player, `Amount is not a number.`);
+            // Athena.player.emit.message(player, `Amount is not a number.`);
+            NotifyController.send(
+                player,
+                1,
+                7,
+                'Figyelem!',
+                'A mennyiség nem egy <b><font color="#3DBA39">szám!</b></font>',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
         }
 
@@ -33,7 +58,15 @@ Athena.commands.register(
 
         const baseItem = Athena.systems.inventory.factory.getBaseItemByFuzzySearch(partialName);
         if (typeof baseItem === 'undefined') {
-            Athena.player.emit.message(player, `Item '${partialName}' does not exist!`);
+            // Athena.player.emit.message(player, `Item '${partialName}' does not exist!`);
+            NotifyController.send(
+                player,
+                4,
+                7,
+                'Hiba',
+                'Ilyen nevű item <b><font color="#3DBA39">nem létezik!</b></font>',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
         }
 
@@ -45,32 +78,72 @@ Athena.commands.register(
         });
 
         if (!result) {
-            Athena.player.emit.notification(player, `Could not add. Inventory full?`);
+            // Athena.player.emit.notification(player, `Could not add. Inventory full?`);
+            NotifyController.send(
+                player,
+                3,
+                7,
+                'Figyelmeztetés',
+                'Az item addolása sikertelen, lehetséges, hogy <b><font color="#3DBA39">az inventory tele van!?</b></font>',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
         }
 
-        Athena.player.emit.notification(player, `Item Added`);
+        // Athena.player.emit.notification(player, `Item Added`);
+        NotifyController.send(
+            player,
+            2,
+            7,
+            'Sikeres',
+            'Az item megtalálható a <b><font color="#3DBA39">leltáradban (I)</b></font>',
+        );
+        NotifyController.clearAll(player); // to clear history or/and notifications on screen
     },
 );
 
 Athena.commands.register(
     'delitem',
-    '/removeitem [dbName] [amount] [version?]',
+    '/delitem [dbName] [amount] [version?]',
     ['admin'],
     async (player: alt.Player, dbName: string, amount: string, version: string | undefined) => {
         if (typeof dbName === 'undefined') {
-            Athena.player.emit.message(player, `Must specify a dbName to remove an item.`);
+            //Athena.player.emit.message(player, `Must specify a dbName to remove an item.`);
+            NotifyController.send(
+                player,
+                3,
+                7,
+                'Figyelmeztetés',
+                'Megkell határoznod a <b><font color="#3DBA39">nevét!</b></font>',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
         }
 
         if (typeof amount === 'undefined') {
-            Athena.player.emit.message(player, `Must specify an amount to remove.`);
+            //Athena.player.emit.message(player, `Must specify an amount to remove.`);
+            NotifyController.send(
+                player,
+                3,
+                7,
+                'Figyelmeztetés',
+                'Megkell határoznod a <b><font color="#3DBA39">mennyiséget!</b></font>',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
         }
 
         const actualAmount = parseInt(amount);
         if (isNaN(actualAmount)) {
-            Athena.player.emit.message(player, `Amount is not a number.`);
+            //Athena.player.emit.message(player, `Amount is not a number.`);
+            NotifyController.send(
+                player,
+                1,
+                7,
+                'Figyelem!',
+                'A mennyiség nem egy <b><font color="#3DBA39">szám!</b></font>',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
         }
 
@@ -90,11 +163,21 @@ Athena.commands.register(
         });
 
         if (!result) {
-            Athena.player.emit.notification(player, `Could not remove?`);
+            //Athena.player.emit.notification(player, `Could not remove?`);
+            NotifyController.send(
+                player,
+                3,
+                7,
+                'Figyelmeztetés',
+                'Az item eltávolítása sikertelen, lehetséges, hogy <b><font color="#3DBA39">nem létezik?</b></font>',
+            );
+            NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
         }
 
-        Athena.player.emit.notification(player, `Item Removed`);
+        // Athena.player.emit.notification(player, `Item Removed`);
+        NotifyController.send(player, 2, 7, 'Sikeres', 'Az item törlése <b><font color="#3DBA39">sikeres.</b></font>');
+        NotifyController.clearAll(player); // to clear history or/and notifications on screen
     },
 );
 
