@@ -53,11 +53,11 @@ onMounted(() => {
 
 <style>
 :root {
-    --auth-bg: #272a37;
-    --auth-bg-light: #323644;
-    --auth-bg-lighter: #414658;
+    --auth-bg: #364481;
+    --auth-bg-light: #525e8a;
+    --auth-bg-lighter: #1d3ba7;
     --auth-bg-brand: #63b9f2;
-    --auth-bg-brand-warning: #f2af63;
+    --auth-bg-brand-warning: #f00;
 }
 
 .basicauth-login .align-center {

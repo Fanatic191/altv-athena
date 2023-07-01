@@ -1,9 +1,9 @@
 <template>
     <div class="stack full-width">
         <div class="btn-group stack">
-            <button class="btn-normal mt-1" @click="emit('select-option', 'LOGIN')">Login</button>
-            <button class="btn-normal mt-4" @click="emit('select-option', 'REGISTER')">Register</button>
-            <button class="btn-normal mt-4" @click="emit('select-option', 'RECOVER')">Recover</button>
+            <button class="btn-normal mt-1" @click="emit('select-option', 'LOGIN')">Bejelentkezés</button>
+            <button class="btn-normal mt-4" @click="emit('select-option', 'REGISTER')">Regisztráció</button>
+            <button class="btn-normal mt-4" @click="emit('select-option', 'RECOVER')">Visszaállítás</button>
             <button class="btn-warning mt-4" @click="quit">Quit</button>
         </div>
     </div>

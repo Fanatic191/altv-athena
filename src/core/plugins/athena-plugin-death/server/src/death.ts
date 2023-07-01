@@ -4,6 +4,7 @@ import * as Athena from '@AthenaServer/api';
 import { distance2d } from '@AthenaShared/utility/vector';
 import { DEATH_EVENTS } from '../../shared/events';
 import { DEATH_CONFIG } from './config';
+import { CurrencyTypes } from '@AthenaShared/enums/currency';
 
 const TimeOfDeath: { [_id: string]: number } = {};
 
@@ -114,6 +115,9 @@ export class DeathSystem {
 
             if (DEATH_CONFIG.LOSE_ALL_WEAPONS_ON_RESPAWN) {
                 await Athena.player.weapons.clear(player);
+            }
+            if (DEATH_CONFIG.LOSE_ALL_CASH_ON_RESPAWN) {
+                await Athena.player.currency.set(player, CurrencyTypes.CASH, 0);
             }
         }
 

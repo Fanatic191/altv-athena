@@ -1,8 +1,8 @@
 <template>
     <div class="stack full-width">
-        <h3 class="no-top">Recover</h3>
+        <h3 class="no-top">Visszaállítás</h3>
         <div class="input-group pa-4">
-            <label for="seedphrase">Seed Phrase</label>
+            <label for="seedphrase">Kulcsok</label>
             <input
                 id="seedphrase"
                 type="text"
@@ -13,20 +13,20 @@
             />
         </div>
         <div class="input-group mt-4 pa-4">
-            <label for="password">New Password</label>
+            <label for="password">Új jelszó</label>
             <input id="password" type="password" autocomplete="off" v-model="password" />
         </div>
         <div class="input-group mt-4 pa-4">
-            <label for="password2">Retype New Password</label>
+            <label for="password2">Jelszó ismét</label>
             <input id="password2" type="password" autocomplete="off" v-model="password2" />
         </div>
         <div class="error-group mt-6 mb-4">
             <div class="errorMessage" v-if="errorMessage">{{ errorMessage }}</div>
         </div>
         <div class="btn-group split space-between">
-            <button class="btn-warning" @click="emit('select-option', 'CHOICE')">Back</button>
-            <button class="btn-disabled" v-if="!isLoginFormValid">Submit</button>
-            <button class="btn-normal" @click="submit" v-else>Submit</button>
+            <button class="btn-warning" @click="emit('select-option', 'CHOICE')">Vissza</button>
+            <button class="btn-disabled" v-if="!isLoginFormValid">Ellenörzés</button>
+            <button class="btn-normal" @click="submit" v-else>Hitelesítés</button>
         </div>
     </div>
 </template>
@@ -52,7 +52,7 @@ const isLoginFormValid = computed(() => {
     }
 
     if (seedphrase.value === '') {
-        errorMessage.value = 'Seed phrase is invalid';
+        errorMessage.value = 'A kulcs érvénytelen';
         return false;
     }
 
@@ -62,12 +62,12 @@ const isLoginFormValid = computed(() => {
     }
 
     if (password.value === '' || password.value.length <= 3) {
-        errorMessage.value = 'Password must be atleast 4 characters long.';
+        errorMessage.value = 'A jelszónak legalább 4 karakternek kell lennie.';
         return false;
     }
 
     if (password2.value === '' || password2.value !== password.value) {
-        errorMessage.value = 'Passwords do not match.';
+        errorMessage.value = 'A jelszó nem egyezik.';
         return false;
     }
 

@@ -25,4 +25,5 @@ export enum HUD_COMPONENT {
     LOCK = 'lock',
     METRIC = 'isMetric',
     FUEL = 'fuel',
+    FUELTANK = 'fueltank',
 }

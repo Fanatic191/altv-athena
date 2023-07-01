@@ -27,5 +27,6 @@
     },
     "css.lint.unknownProperties": "ignore",
     "docify.commentService.docstringFormat": "JsDoc",
-    "docify.commentService.programmingLanguage": "javascript"
+    "docify.commentService.programmingLanguage": "javascript",
+    "cSpell.enableFiletypes": ["vue"]
 }

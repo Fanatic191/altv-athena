@@ -17,7 +17,7 @@ function cleanupSessions() {
                 continue;
             }
 
-            player.kick('Session Expired');
+            player.kick('Túl sokáig voltál inaktív, csatlakozz újra.');
             continue;
         }
 
@@ -44,24 +44,24 @@ async function handleRegister(player: alt.Player, username: string, password: st
 
     const sessionIndex = sessions.findIndex((x) => x.id === player.id);
     if (sessionIndex <= -1) {
-        player.kick(`No session request found. Restart client.`);
+        player.kick(`A kapcsolat létrehozása sikertelen! Csatlakozz újra!`);
         return;
     }
 
     if (sessions[sessionIndex].account) {
-        player.kick(`Session request already completed. Restart client.`);
+        player.kick(`Már csatlakozva vagy, indítsd újra a klienst.`);
         return;
     }
 
     if (Date.now() > sessions[sessionIndex].expiration) {
-        player.kick(`Authentication session expired. Restart client.`);
+        player.kick(`A hitelesítés sikertelen, indítsd újra a klienst. `);
         return;
     }
 
     const accountDataRef = await Athena.systems.account.getAccount('username', username);
     const accountData = <AccountEx>accountDataRef;
     if (accountData) {
-        Athena.webview.emit(player, AuthEvents.toWebview.showErrorMessage, 'Username is already in use.');
+        Athena.webview.emit(player, AuthEvents.toWebview.showErrorMessage, 'A felhasználónév már foglalt.');
         return;
     }
 
@@ -104,7 +104,7 @@ async function handleLogin(player: alt.Player, username: string, password: strin
     const accountDataRef = await Athena.systems.account.getAccount('username', username);
     if (!accountDataRef) {
         // We use the same message here becauses it makes it ambiguous for bad actors.
-        Athena.webview.emit(player, AuthEvents.toWebview.showErrorMessage, 'Username or Password does not match.');
+        Athena.webview.emit(player, AuthEvents.toWebview.showErrorMessage, 'A felhasználónév és a jelszó nem egyezik.');
         return;
     }
 
@@ -112,7 +112,7 @@ async function handleLogin(player: alt.Player, username: string, password: strin
     accountData._id = accountData._id.toString();
 
     if (!Athena.utility.hash.testPassword(password, accountData.password)) {
-        Athena.webview.emit(player, AuthEvents.toWebview.showErrorMessage, 'Username or Password does not match.');
+        Athena.webview.emit(player, AuthEvents.toWebview.showErrorMessage, 'A felhasználónév és a jelszó nem egyezik.');
         return;
     }
 
@@ -125,7 +125,7 @@ async function handleLogin(player: alt.Player, username: string, password: strin
 
     const loggedInPlayer = Athena.getters.player.byDatabaseID(accountData._id.toString());
     if (typeof loggedInPlayer !== 'undefined') {
-        player.kick(`Already Logged In`);
+        player.kick(`Műár be vagy jelentkezve.`);
         return;
     }
 
@@ -143,7 +143,7 @@ async function handleFinish(player: alt.Player) {
     player.emit(AuthEvents.toClient.endLogin);
     await Athena.player.set.account(player, sessions[sessionIndex].account);
     Athena.systems.loginFlow.next(player);
-    alt.log(`${sessions[sessionIndex].account.username} has authenticated.`);
+    alt.log(`${sessions[sessionIndex].account.username} sikeresen csatlakozott.`);
     sessions[sessionIndex].finished = true;
 }
 

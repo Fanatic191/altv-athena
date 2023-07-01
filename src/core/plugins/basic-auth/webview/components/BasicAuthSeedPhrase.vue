@@ -2,13 +2,13 @@
     <div class="stack full-width">
         <h3 class="no-top">Seed Phrase</h3>
         <p class="justify pb-4">
-            Write down this phrase to recover your account. Skipping this may result in your account being lost.
+            Az itt megjelenő írásokat MENTSD el valahova! FONTOS! Enélkül elvesztheted a felhasználódat!
         </p>
         <div class="seed-group">
             <span v-for="(word, index) in props.seedphrase.split(' ')">{{ `${index + 1}. ${word}` }}</span>
         </div>
         <div class="btn-group split space-between">
-            <button class="btn-normal full-width" @click="submit">Okay, I stored it somewhere safe.</button>
+            <button class="btn-normal full-width" @click="submit">Megértettem és elmentettem a kulcsokat.</button>
         </div>
     </div>
 </template>

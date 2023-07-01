@@ -1,21 +1,21 @@
 <template>
     <div class="stack full-width">
-        <h3 class="no-top">Login</h3>
+        <h3 class="no-top">Bejelentkezés</h3>
         <div class="input-group pa-4">
-            <label for="username">Username</label>
+            <label for="username">Felhasználónév</label>
             <input id="username" type="text" autocomplete="off" v-model="username" ref="firstFocus" />
         </div>
         <div class="input-group mt-4 pa-4">
-            <label for="password">Password</label>
+            <label for="password">Jelszó</label>
             <input id="password" type="password" autocomplete="off" v-model="password" />
         </div>
         <div class="error-group mt-6 mb-4">
             <div class="errorMessage" v-if="errorMessage">{{ errorMessage }}</div>
         </div>
         <div class="btn-group split space-between">
-            <button class="btn-warning" @click="emit('select-option', 'CHOICE')">Back</button>
-            <button class="btn-disabled" v-if="!isLoginFormValid">Submit</button>
-            <button class="btn-normal" @click="submit" v-else>Submit</button>
+            <button class="btn-warning" @click="emit('select-option', 'CHOICE')">Vissza</button>
+            <button class="btn-disabled" v-if="!isLoginFormValid">Ellenörzés</button>
+            <button class="btn-normal" @click="submit" v-else>Hitelesítés</button>
         </div>
     </div>
 </template>

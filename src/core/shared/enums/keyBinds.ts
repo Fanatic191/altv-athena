@@ -27,6 +27,8 @@ export const KEY_BINDS = {
     VEHICLE_ENGINE: 89,
     // F1
     DEBUG_KEY: 112,
+    // F2
+    HUD_SWITCH: 113,
 };
 
 /**
