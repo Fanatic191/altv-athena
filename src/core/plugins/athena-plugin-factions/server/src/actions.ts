@@ -107,7 +107,7 @@ export class FactionActions {
         }
 
         // Permission Check
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             const index = faction.actions[rank.uid].findIndex((uid) => uid === actionUid);
             if (index <= -1) {
                 return null;

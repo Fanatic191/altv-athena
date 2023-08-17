@@ -91,7 +91,7 @@ export default defineComponent({
                 return;
             }
 
-            alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.ADD_PARKING_SPOT, this.pos, this.rot);
+            alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.ADD_PARKING_SPOT, this.pos, this.rot, this.faction._id);
         },
         removeLocation(index: number) {
             if (!('alt' in window)) {
@@ -99,7 +99,7 @@ export default defineComponent({
                 return;
             }
 
-            alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.REMOVE_PARKING_SPOT, index);
+            alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.REMOVE_PARKING_SPOT, index, this.faction._id);
         },
     },
 });

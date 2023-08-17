@@ -1,5 +1,5 @@
 import * as alt from 'alt-server';
-import { Vehicle_Behavior } from '@AthenaPlugins/athena-fuel-stations/shared/vehicle';
+import { Vehicle_Behavior } from '@AthenaPlugins/athena-plugin-fuel-stations/shared/vehicle';
 
 // Extends the player interface.
 declare module 'alt-server' {

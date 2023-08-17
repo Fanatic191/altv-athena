@@ -37,10 +37,10 @@
 
 <script lang="ts">
 import { defineComponent, defineAsyncComponent } from 'vue';
-import { Vector3 } from '../../../../../shared/interfaces/vector';
 import { FACTION_EVENTS } from '../../../shared/factionEvents';
 import { FACTION_PFUNC } from '../../../shared/funcNames';
 import { Faction } from '../../../shared/interfaces';
+import {Vector3} from "@AthenaPlugins/gp-athena-utils/shared/interfaces/vector";
 
 const ComponentName = 'HeadQuarters';
 export default defineComponent({
@@ -77,7 +77,7 @@ export default defineComponent({
                 return;
             }
 
-            alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.SET_HEAD_QUARTERS, this.pos);
+            alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.SET_HEAD_QUARTERS, this.pos, this.faction._id);
         },
         setBlip(shouldClear = false) {
             if (!('alt' in window)) {
@@ -91,11 +91,11 @@ export default defineComponent({
             }
 
             if (shouldClear) {
-                alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.SET_BLIP, undefined, undefined);
+                alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.SET_BLIP, undefined, undefined, this.faction._id);
                 return;
             }
 
-            alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.SET_BLIP, this.blip, this.blipColor);
+            alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.SET_BLIP, this.blip, this.blipColor, this.faction._id);
         },
     },
     mounted() {

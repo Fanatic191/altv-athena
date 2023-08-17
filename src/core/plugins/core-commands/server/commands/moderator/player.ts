@@ -55,7 +55,7 @@ Athena.commands.register(
 
         const target = Athena.systems.identifier.getPlayer(id);
         if (!target) {
-            Athena.player.emit.message(player, 'Cannot find player with that ID.');
+            //Athena.player.emit.message(player, 'Cannot find player with that ID.');
             NotifyController.send(
                 player,
                 3,

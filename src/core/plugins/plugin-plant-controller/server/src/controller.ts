@@ -69,19 +69,20 @@ const PlantControllerConst = {
 
     updatePlants() {
         setInterval(() => {
-            allPlants.forEach((plant) => {
+            for (const plant of allPlants) {
                 if (
                     !plant.data.seed ||
                     plant.data.duration <= 0 ||
                     plant.data.water === null ||
                     plant.data.water <= PlantControllerConfig.waterTreshold
-                )
-                    return;
+                ) {
+                    continue;
+                }
 
                 plant.data.duration -= 1;
                 plant.data.water -= PlantControllerConfig.waterLossPerSecond;
 
-                if (plant.data.duration > 0) {
+                if (plant.data.duration <= 0) {
                     PlantController.handleHarvestState(plant);
                 }
 
@@ -91,7 +92,7 @@ const PlantControllerConst = {
 
                 PlantController.handleObjectState(plant);
                 PlantController.invokeDatabaseUpdate(plant);
-            });
+            }
         }, 1000);
     },
 
@@ -184,6 +185,7 @@ const PlantControllerConst = {
 
     async placeSeed(player: alt.Player, slot: number, type: 'toolbar') {
         const playerData = Athena.document.character.get(player);
+
         const storedItemRef = Athena.systems.inventory.slot.getAt<{
             seed: string;
             duration: number;

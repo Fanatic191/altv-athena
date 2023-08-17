@@ -52,22 +52,17 @@ class InternalFunctions {
         return true;
     }
 
-    static async setRankPaycheck(player: alt.Player, rank: string, value: number) {
-        const playerData = Athena.document.character.get(player);
-        if (!player || !player.valid || !playerData || !playerData.faction) {
-            return false;
-        }
-
+    static async setRankPaycheck(player: alt.Player, rank: string, value: number, factionId: string) {
         if (value <= -1) {
             return false;
         }
 
-        const faction = FactionHandler.get(playerData.faction);
+        const faction = FactionHandler.get(factionId);
         if (!faction) {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             return false;
         }
 
@@ -85,18 +80,13 @@ class InternalFunctions {
         return didUpdate.status;
     }
 
-    static async setTime(player: alt.Player, value: number) {
-        const playerData = Athena.document.character.get(player);
-        if (!player || !player.valid || !playerData || !playerData.faction) {
-            return false;
-        }
-
-        const faction = FactionHandler.get(playerData.faction);
+    static async setTime(player: alt.Player, value: number, factionId: string) {
+        const faction = FactionHandler.get(factionId);
         if (!faction) {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             return false;
         }
 
@@ -118,10 +108,6 @@ class InternalFunctions {
 
         const faction = FactionHandler.get(playerData.faction);
         if (!faction) {
-            return false;
-        }
-
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
             return false;
         }
 

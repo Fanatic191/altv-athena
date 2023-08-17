@@ -12,7 +12,7 @@ export class FactionParser {
     static getRank(faction: Faction, characterOrUID: FactionCharacter | string): FactionRank | null {
         let uid;
 
-        if (typeof characterOrUID === 'string') {
+        if (typeof characterOrUID === 'string' || typeof characterOrUID === 'undefined' || characterOrUID === null) {
             uid = characterOrUID;
         } else {
             uid = characterOrUID.rank;
@@ -177,6 +177,14 @@ export class FactionParser {
         againstUserRank: FactionRank,
         hasOwnership = false,
     ): Partial<RankPermissions> {
+        if(hasOwnership) {
+            return {
+                manageRanks: true,
+                manageMembers: true,
+                kickMembers: true
+            }
+        }
+
         if (actingUserRank.uid === againstUserRank.uid && !hasOwnership) {
             return {};
         }

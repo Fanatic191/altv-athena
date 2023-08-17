@@ -118,6 +118,7 @@ export default defineComponent({
     props: {
         faction: Object as () => Faction,
         character: String,
+        isAdmin: Boolean
     },
     components: {
         // Global Components
@@ -276,8 +277,8 @@ export default defineComponent({
             const member = FactionParser.getMember(this.faction, this.character);
             const rank = FactionParser.getRank(this.faction, member);
 
-            this.manageRanks = member.hasOwnership || rank.rankPermissions.manageRanks ? true : false;
-            this.manageRankPermissions = member.hasOwnership || rank.rankPermissions.manageRankPermissions ? true : false;
+            this.manageRanks = this.isAdmin || rank.rankPermissions.manageRanks ? true : false;
+            this.manageRankPermissions = this.isAdmin || rank.rankPermissions.manageRankPermissions ? true : false;
         }
     },
     mounted() {

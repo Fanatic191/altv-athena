@@ -4,7 +4,6 @@ import { VehicleInfo } from '@AthenaShared/interfaces/vehicleInfo';
 import { DEALERSHIP_EVENTS } from '../../shared/events';
 import { IDealership } from '../../shared/interfaces';
 import { DEALERSHIP_LOCALE } from '../../shared/locale';
-import Parkingspot from './spot';
 
 const dealerships: Array<IDealership> = [];
 let inDealership: { [key: string]: string } = {};
@@ -103,7 +102,7 @@ export class DealershipView {
         inDealership[player.id] = dealership.uid;
     }
 
-    static async purchase(player: alt.Player, vehicle: VehicleInfo, color: number) {
+    static purchase(player: alt.Player, vehicle: VehicleInfo, color: number) {
         const playerData = Athena.document.character.get(player);
         if (!inDealership[player.id]) {
             Athena.player.emit.soundFrontend(player, 'Hack_Failed', 'DLC_HEIST_BIOLAB_PREP_HACKING_SOUNDS');
@@ -137,13 +136,6 @@ export class DealershipView {
             return;
         }
 
-        const openSpot = await DealershipView.getVehicleSpawnPoint();
-        if (!openSpot) {
-            Athena.player.emit.soundFrontend(player, 'Hack_Failed', 'DLC_HEIST_BIOLAB_PREP_HACKING_SOUNDS');
-            Athena.player.emit.notification(player, `~r~Nincs szabad kiálló, kérlek várj...`);
-            return;
-        }
-
         Athena.vehicle.add.toDatabase(playerData._id.toString(), vehicleInfo.name, { x: 0, y: 0, z: 0 });
 
         Athena.player.emit.notification(player, DEALERSHIP_LOCALE.VEHICLE_MOVED_TO_NEAREST_GARAGE);
@@ -151,38 +143,5 @@ export class DealershipView {
         Athena.player.events.trigger<'PURCHASED_VEHICLE'>('PURCHASED_VEHICLE', player, name);
 
         Athena.player.emit.sound2D(player, 'item_purchase');
-    }
-    /**
-     * Creates and checks if a vehicle is in a spot and returns a spot if it is open.
-     * @static
-     * @return {({ pos: Vector3; rot: Vector3 } | null)}
-     * @memberof Dealership
-     */
-    static async getVehicleSpawnPoint(): Promise<{ pos: alt.Vector3; rot: alt.Vector3 } | null> {
-        for (let i = 0; i < Parkingspot.PARKING_POINTS.length; i++) {
-            const point = Parkingspot.PARKING_POINTS[i];
-            const pointTest = new alt.ColshapeSphere(point.pos.x, point.pos.y, point.pos.z - 1, 2);
-
-            // Have to do a small sleep to the ColShape propogates entities inside of it.
-            await new Promise((resolve: Function) => {
-                alt.setTimeout(() => {
-                    resolve();
-                }, 250);
-            });
-
-            const spaceOccupied = alt.Vehicle.all.find((veh) => veh && veh.valid && pointTest.isEntityIn(veh));
-
-            try {
-                pointTest.destroy();
-            } catch (err) {}
-
-            if (spaceOccupied) {
-                continue;
-            }
-
-            return point;
-        }
-
-        return null;
     }
 }

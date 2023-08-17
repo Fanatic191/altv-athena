@@ -11,16 +11,16 @@
                     <sup class="grey--text text--lighten-1 pt-2">Your Balance</sup>
                 </div>
             </div>
-            <div class="panel pa-6 mb-4">
+            <div class="panel pa-6 mb-4" v-if="isAdmin">
                 <input v-model="amount" type="number" class="input" placeholder="Amount" />
             </div>
-            <div class="split full-split space-between">
+            <div class="split full-split space-between" v-if="isAdmin">
                 <div class="panel mb-4 mr-2 pa-4">
                     <template v-if="bankRemove && faction.bank >= 1 && isValid">
                         <Button class="bank-button" color="red" @click="withdraw">Withdraw</Button>
                     </template>
                     <template v-else>
-                        <Button class="bank-button" :disable="true">Withdraw</Button>
+                        <Button class="bank-button" :disable="true">Delete</Button>
                     </template>
                 </div>
                 <div class="panel mb-4 ml-2 pa-4">
@@ -28,7 +28,7 @@
                         <Button class="bank-button" color="blue" @click="deposit">Deposit</Button>
                     </template>
                     <template v-else>
-                        <Button class="bank-button" :disable="true">Deposit</Button>
+                        <Button class="bank-button" :disable="true">Add</Button>
                     </template>
                 </div>
             </div>
@@ -42,6 +42,7 @@
                     class="fade-in"
                     :key="index"
                     v-bind:faction="faction"
+                    v-bind:isAdmin="isAdmin"
                     v-bind:character="character"
                     v-bind:money="money"
                 />
@@ -66,6 +67,7 @@ export default defineComponent({
         faction: Object as () => Faction,
         character: String,
         money: Number,
+        isAdmin: Boolean,
     },
     components: {
         Button: defineAsyncComponent(() => import('@components/Button.vue')),
@@ -77,7 +79,7 @@ export default defineComponent({
             amount: 0,
             bankAdd: true,
             bankRemove: false,
-            isValid: false,
+            isValid: false
         };
     },
     methods: {
@@ -97,7 +99,7 @@ export default defineComponent({
                 return;
             }
 
-            alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.SUB_BANK, this.amount);
+            alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.SUB_BANK, this.amount, this.faction._id);
         },
         deposit() {
             if (this.amount > this.money) {
@@ -112,17 +114,17 @@ export default defineComponent({
                 return;
             }
 
-            alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.ADD_BANK, this.amount);
+            alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.ADD_BANK, this.amount, this.faction._id);
         },
         updateBank() {
             const member = FactionParser.getMember(this.faction, this.character);
             const rank = FactionParser.getRank(this.faction, member);
 
-            this.bankAdd = rank.rankPermissions.bankAdd;
-            this.bankRemove = rank.rankPermissions.bankRemove;
+            this.bankAdd = this.isAdmin;
+            this.bankRemove = this.isAdmin;
 
-            this.manageRanks = rank.rankPermissions.manageRanks;
-            this.manageRankPermissions = rank.rankPermissions.manageRankPermissions;
+            this.manageRanks = rank?.rankPermissions?.manageRanks || this.isAdmin;
+            this.manageRankPermissions = rank?.rankPermissions?.manageRankPermissions || this.isAdmin;
         },
     },
     watch: {

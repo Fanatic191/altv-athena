@@ -2,8 +2,6 @@ import * as alt from 'alt-shared';
 type _id = string;
 
 export const RankPermissionNames = {
-    bankAdd: 'bankAdd',
-    bankRemove: 'bankRemove',
     manageRanks: 'manageRanks',
     manageRankPermissions: 'manageRankPermissions',
     manageMembers: 'manageMembers',
@@ -17,24 +15,6 @@ export const RankPermissionNames = {
  * @interface RankPermissions
  */
 export interface RankPermissions {
-    /**
-     * Can this rank add to the bank?
-     *
-     * @type {boolean}
-     * @memberof FactionRank
-     */
-    bankAdd: boolean;
-
-    /**
-     * Can this rank remove from the bank,
-     * purchase vehicles,
-     * and do general faction bank purchases.
-     *
-     * @type {boolean}
-     * @memberof FactionRank
-     */
-    bankRemove: boolean;
-
     /**
      * Can this rank manage ranks lower than itself?
      *

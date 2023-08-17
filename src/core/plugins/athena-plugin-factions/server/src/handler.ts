@@ -81,7 +81,7 @@ export class FactionHandler {
      * @return {Promise<IGenericResponse>} _id
      * @memberof FactionHandler
      */
-    static async add(characterOwnerID: string, _faction: FactionCore): Promise<any> {
+    static async add(_faction: FactionCore): Promise<any> {
         alt.logWarning('Faction add...');
         if (!_faction.name) {
             alt.logWarning(`Cannot create faction, missing faction name.`);
@@ -99,16 +99,6 @@ export class FactionHandler {
             _faction.bank = 0;
         }
 
-        const character = await Database.fetchData<Character>('_id', characterOwnerID, Collections.Characters);
-        if (!character) {
-            alt.logWarning(`Could not find a character with identifier: ${characterOwnerID}`);
-            return { status: false, response: `Could not find a character with identifier: ${characterOwnerID}` };
-        }
-
-        if (character.faction) {
-            return { status: false, response: `Character is already in a faction.` };
-        }
-
         const defaultRanks = deepCloneObject<Array<FactionRank>>(DefaultRanks);
         for (let i = 0; i < defaultRanks.length; i++) {
             defaultRanks[i].uid = sha256Random(JSON.stringify(defaultRanks[i]));
@@ -116,14 +106,7 @@ export class FactionHandler {
 
         const faction: Faction = {
             ..._faction,
-            members: {
-                [characterOwnerID]: {
-                    id: characterOwnerID,
-                    name: character.name,
-                    rank: defaultRanks[0].uid,
-                    hasOwnership: true,
-                },
-            },
+            members: {},
             ranks: defaultRanks,
             vehicles: [],
             storages: [],
@@ -137,25 +120,9 @@ export class FactionHandler {
             return { status: false, response: `Cannot insert faction into database.` };
         }
 
-        character.faction = document._id.toString();
-        await Database.updatePartialData(
-            character._id,
-            {
-                faction: character.faction,
-            },
-            Collections.Characters,
-        );
-
-        const xTarget = alt.Player.all.find((x) => x && x && x.id.toString() === character._id.toString());
-        const targetData = Athena.document.character.get(xTarget);
-
-        if (targetData) {
-            targetData.faction = character.faction;
-        }
-
         alt.logWarning('Faction add... END');
         InternalFunctions.create(document);
-        return { status: false, response: document._id.toString() };
+        return { status: true, response: document._id.toString() };
     }
 
     /**
@@ -178,7 +145,6 @@ export class FactionHandler {
 
         // Remove the faction outright...
         const factionClone = deepCloneObject<Faction>(faction);
-        delete factions[_id];
 
         // Fetch faction owner...
         const ownerIdentifier = await new Promise((resolve: Function) => {
@@ -189,6 +155,7 @@ export class FactionHandler {
 
                 return resolve(factionClone.members[key].id);
             });
+            resolve(null);
         });
 
         // Clear all members...
@@ -256,6 +223,9 @@ export class FactionHandler {
                 Database.deleteById(storageId, Collections.Storage);
             }
         }
+
+        delete factions[_id];
+        await Database.deleteById(faction._id, Collections.Factions);
 
         return { status: true, response: `Deleted faction successfully` };
     }
@@ -351,6 +321,11 @@ export class FactionHandler {
     static updateSettings(faction: Faction) {
         alt.logWarning('Faction updateSettings...');
         if (faction.settings && faction.settings.blip) {
+            // Remove old markings
+            Athena.controllers.blip.remove(faction._id.toString());
+            Athena.controllers.interaction.remove(faction._id.toString());
+            Athena.controllers.marker.remove(faction._id.toString());
+
             Athena.controllers.blip.append({
                 uid: faction._id.toString(),
                 color: faction.settings.blipColor,
@@ -383,6 +358,8 @@ export class FactionHandler {
             });
         } else {
             Athena.controllers.blip.remove(faction._id.toString());
+            Athena.controllers.interaction.remove(faction._id.toString());
+            Athena.controllers.marker.remove(faction._id.toString());
         }
 
         Athena.controllers.interaction.remove(`${faction._id.toString()}-storage-0`);
@@ -463,7 +440,7 @@ export class FactionHandler {
 
         let rank = FactionPlayerFuncs.getPlayerFactionRank(player);
         if (!rank || !rank.rankPermissions.canOpenStorages) {
-            if (!FactionPlayerFuncs.isOwner(player)) {
+            if (!FactionPlayerFuncs.isAdmin(player)) {
                 Athena.player.emit.notification(player, LocaleController.get(LOCALE_KEYS.FACTION_STORAGE_NO_ACCESS));
                 return false;
             }

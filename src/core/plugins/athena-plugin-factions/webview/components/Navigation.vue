@@ -23,6 +23,7 @@ import Icon from '@components/Icon.vue';
 interface iPage {
     name: string;
     page: string;
+    isVisible: boolean;
 }
 
 const ComponentName = 'Navigation';

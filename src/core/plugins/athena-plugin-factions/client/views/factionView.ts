@@ -4,30 +4,38 @@ import { PLAYER_SYNCED_META } from '../../../../shared/enums/playerSynced';
 import { VEHICLE_SYNCED_META } from '../../../../shared/enums/vehicleSyncedMeta';
 import { FACTION_EVENTS } from '../../shared/factionEvents';
 import { Faction } from '../../shared/interfaces';
+import {isMenuOpen} from "alt-client";
 
-const onOpen: Array<(view: alt.WebView, faction: Faction) => void> = [];
+const onOpen: Array<(view: alt.WebView, faction: Faction, isAdmin: boolean) => void> = [];
 const onClose: Array<(view: alt.WebView, faction: Faction) => void> = [];
-const onRefresh: Array<(faction: Faction) => void> = [];
+const onRefresh: Array<(faction: Faction, isAdmin: boolean) => void> = [];
 
 let faction: Faction;
+let isAdmin = false;
 let isOpen = false;
 
+export const KEY_BINDS_FACTIONS = {
+    OPEN: 71,
+    ACCEPT: 38,
+}
+
 class InternalFunctions {
-    static async open(_faction: Faction) {
+    static async open(_faction: Faction, _isAdmin: boolean) {
         faction = _faction;
+        isAdmin = _isAdmin;
 
         // Just updates faction data dynamically for users.
         if (isOpen) {
             InternalFunctions.ready();
 
             for (const element of onRefresh) {
-                element(faction);
+                element(faction, isAdmin);
             }
 
             return;
         }
 
-        if (AthenaClient.webview.isAnyMenuOpen()) {
+        if (AthenaClient.webview.isAnyMenuOpen() && !_isAdmin) {
             return;
         }
 
@@ -42,7 +50,7 @@ class InternalFunctions {
         view.on(FACTION_EVENTS.WEBVIEW.ACTION, InternalFunctions.action);
 
         for (const element of onOpen) {
-            element(view, faction);
+            element(view, faction, isAdmin);
         }
 
         AthenaClient.webview.openPages([FACTION_EVENTS.WEBVIEW.NAME]);
@@ -58,6 +66,9 @@ class InternalFunctions {
             return;
         }
 
+        if (isAdmin && faction._id !== _faction._id) {
+            return;
+        }
         if (!_faction) {
             InternalFunctions.close();
             return;
@@ -102,6 +113,7 @@ class InternalFunctions {
             alt.Player.local.pos,
             alt.Player.local.rot,
             vehicleList,
+            isAdmin
         );
     }
 
@@ -140,8 +152,52 @@ class InternalFunctions {
 
 export class FactionView {
     static init() {
+        AthenaClient.systems.hotkeys.add({
+            key: KEY_BINDS_FACTIONS.OPEN,
+            description: 'Open Faction Window',
+            identifier: 'open-faction-window',
+            keyDown: function () {
+                if(!isMenuOpen()) {
+                    alt.emitServer(FACTION_EVENTS.PROTOCOL.OPEN);
+                }
+            },
+        });
+
+        AthenaClient.webview.on(FACTION_EVENTS.WEBVIEW.GET_CLOSEST_PLAYERS, FactionView.getClosestPlayers);
+
         alt.onServer(FACTION_EVENTS.PROTOCOL.OPEN, InternalFunctions.open);
         alt.onServer(FACTION_EVENTS.PROTOCOL.REFRESH, InternalFunctions.refresh);
+    }
+
+    static getClosestPlayers(isAdmin: boolean) {
+        const playerList = [...alt.Player.all];
+        const validPlayers: Array<{ name: string; id: number }> = [];
+
+        for (let i = 0; i < playerList.length; i++) {
+            if (!playerList[i].valid) {
+                continue;
+            }
+
+            if (!isAdmin && playerList[i].id === alt.Player.local.id) {
+                continue;
+            }
+
+            const id: number = playerList[i].getSyncedMeta(PLAYER_SYNCED_META.IDENTIFICATION_ID) as number;
+            const name: string = playerList[i].getSyncedMeta(PLAYER_SYNCED_META.NAME) as string;
+
+            if (typeof id === 'undefined' || typeof name === 'undefined') {
+                continue;
+            }
+
+            const dist = AthenaClient.utility.vector.distance(alt.Player.local.pos, playerList[i].pos);
+            if (dist > 10) {
+                continue;
+            }
+
+            validPlayers.push({ name, id });
+        }
+
+        AthenaClient.webview.emit(FACTION_EVENTS.PROTOCOL.SET_CLOSEST_PLAYERS, validPlayers);
     }
 
     /**

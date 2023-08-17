@@ -8,6 +8,7 @@ import IVehicleMod from '@AthenaShared/interfaces/vehicleMod';
 import VehicleExtra from '@AthenaShared/interfaces/vehicleExtra';
 import Database from '@stuyk/ezmongodb';
 import { NotifyController } from '@AthenaPlugins/fnky-notifications/server';
+import { byName } from '@AthenaServer/getters/player';
 
 Athena.systems.messenger.commands.register(
     'dv',
@@ -28,7 +29,7 @@ Athena.systems.messenger.commands.register(
                 4,
                 7,
                 'Sikertelen',
-                'A jármű törlése <b><font color="#CC394F">sikertelen</b></font>! Nem ülsz benne..',
+                'A jármű törlése <b><font color="#CC394F">sikertelen</b></font>! Nem ülsz autóban...',
             );
             NotifyController.clearAll(player); // to clear history or/and notifications on screen
             return;
@@ -44,7 +45,7 @@ Athena.systems.messenger.commands.register(
                 2,
                 7,
                 'Sikeres',
-                'Az autó, amiben ültél, <b><font color="#3DBA39">sikeresen törölve.</b></font>',
+                `${player.name} admin - Az autó, amiben ültél, <b><font color="#3DBA39">sikeresen törölve lett.</b></font>`,
             );
             NotifyController.clearAll(player); // to clear history or/and notifications on screen
 
@@ -90,7 +91,7 @@ Athena.commands.register('mv', '/mv [model]', ['admin'], (player: alt.Player, mo
             2,
             7,
             'Sikeres',
-            `${player} <b><font color="#3DBA39">sikeresen </b></font> létrehozott egy ${model}-t.`,
+            `${player.name} <b><font color="#3DBA39">sikeresen </b></font> létrehozott egy ${model}-t.`,
         );
         NotifyController.clearAll(player); // to clear history or/and notifications on screen
         return;
@@ -104,13 +105,13 @@ Athena.commands.register('mv', '/mv [model]', ['admin'], (player: alt.Player, mo
     const fwd = Athena.utility.vector.getVectorInFrontOfPlayer(player, 5);
     Athena.vehicle.add.toPlayer(player, model, fwd);
     // Athena.player.emit.message(player, `Sikeresen létrehoztad az autót: ${model}`);
-    alt.logWarning(`${player} létrehozott egy ${model}-t.`);
+    alt.logWarning(`${player.name} létrehozott egy ${model}-t.`);
     NotifyController.send(
         player,
         2,
         7,
         'Sikeres',
-        `${name} <b><font color="#3DBA39">sikeresen </b></font> létrehozott egy ${model}-t.`,
+        `${player.name} <b><font color="#3DBA39">sikeresen </b></font> létrehozott egy ${model}-t.`,
     );
     NotifyController.clearAll(player); // to clear history or/and notifications on screen
 });
@@ -138,7 +139,7 @@ Athena.commands.register('fixveh', '', ['admin'], (player: alt.Player) => {
             3,
             5,
             'Figyelmeztetés',
-            'Nincs a közeledben jármű. <b><font color="#3DBA39">Ülj bele az autóba, amit javítani szeretnél!</b></font>',
+            'Nincs a közeledben jármű. <b><font color="#3DBA39">Ülj be az autóba, amit javítani szeretnél!</b></font>',
         );
         NotifyController.clearAll(player); // to clear history or/and notifications on screen
         return;
@@ -153,10 +154,16 @@ Athena.commands.register('fixveh', '', ['admin'], (player: alt.Player) => {
     let vehInfo = Athena.utility.hashLookup.vehicle.hash(hash);
 
     // Athena.player.emit.message(player, `${vehInfo.displayName} got repaired.`);
-    NotifyController.send(player, 2, 5, 'Sikeres', 'A jármű <b><font color="#3DBA39">sikeresen</b></font> megjavítva.');
+    NotifyController.send(
+        player,
+        2,
+        5,
+        'Sikeres',
+        `${player.name} admin - a jármű <b><font color="#3DBA39">sikeresen</b></font> megjavítva.`,
+    );
     NotifyController.clearAll(player); // to clear history or/and notifications on screen
 
-    alt.logWarning(`${player} megjavította a(z): ${vehInfo.displayName}`);
+    alt.logWarning(`${player.name} megjavította a(z): ${vehInfo.name}`);
 });
 
 // The setLivery command has two possible commands that call both the same function. This is needed since it's not possible anymore to declare more than one name like in V4.
@@ -190,7 +197,7 @@ function setLivery(player: alt.Player, livery: string) {
             3,
             5,
             'Figyelmeztetés',
-            'Nincs a közeledben jármű. <b><font color="#3DBA39">Ülj bele az autóba, amit javítani szeretnél!</b></font>',
+            'Nincs a közeledben jármű. <b><font color="#3DBA39">Ülj bele az autóba, amit matricázni szeretnél!</b></font>',
         );
         NotifyController.clearAll(player); // to clear history or/and notifications on screen
         return;
@@ -374,12 +381,25 @@ Athena.commands.register(
                 Athena.vehicle.tuning.applyTuning(vehicle, { mods: [{ id: i, value: maxId }] });
             }
         }
+        const hash = typeof vehicle.model === 'number' ? vehicle.model : alt.hash(vehicle.model);
+
+        let vehInfo = Athena.utility.hashLookup.vehicle.hash(hash);
         Athena.vehicle.controls.updateLastUsed(vehicle);
         Athena.vehicle.controls.update(vehicle);
+        alt.logWarning(`${player.name} feltuningolta teljesen a(z): ${vehInfo.name}`);
 
         const tuningData: IVehicleTuning = Athena.vehicle.tuning.getTuning(vehicle);
 
         Athena.document.vehicle.set(vehicle, 'tuning', tuningData);
+        NotifyController.send(
+            player,
+            3,
+            7,
+            'Sikeres',
+            'A jármű tuningja <b><font color="#FFE13A">sikeresen</b></font> beállítva.',
+        );
+        NotifyController.clearAll(player); // to clear history or/and notifications on screen
+        return;
     },
 );
 

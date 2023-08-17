@@ -44,7 +44,7 @@ export class FuelStationSystem {
             Athena.controllers.interaction.append({
                 uid: `fuel-pump-${i}`,
                 position: fuelPump,
-                description: 'Refuel Vehicle',
+                description: 'Tankolás (Enter)',
                 callback: FuelStationSystem.request,
                 debug: false,
             });
@@ -138,11 +138,11 @@ export class FuelStationSystem {
         missingFuel = Math.floor(missingFuel);
 
         const trigger: JobTrigger = {
-            header: 'Fuel Vehicle',
+            header: 'Üzemanyag töltés',
             acceptCallback: FuelStationSystem.start,
             cancelCallback: FuelStationSystem.cancel,
             image: '../../assets/images/refuel.jpg',
-            summary: `How much % of fuel do you want to refill in the ${vehicleData.model}, if it costs $${FUEL_CONFIG.FUEL_PRICE} each?`,
+            summary: `Mennyi üzemanyagot szeretnél tankolni a(z) ${vehicleData.model}? Az ára $${FUEL_CONFIG.FUEL_PRICE} literenként.`,
             maxAmount: missingFuel,
         };
 

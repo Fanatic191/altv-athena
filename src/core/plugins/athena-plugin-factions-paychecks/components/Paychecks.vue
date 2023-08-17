@@ -59,10 +59,7 @@ export default defineComponent({
         character: String,
         pos: Object as () => Vector3,
         rot: Object as () => Vector3,
-        isOwner: {
-            type: Boolean,
-            default: false,
-        },
+        isAdmin: Boolean
     },
     components: {
         Button: defineAsyncComponent(() => import('@components/Button.vue')),
@@ -87,16 +84,10 @@ export default defineComponent({
                 return;
             }
 
-            alt.emit(F_PAYCHECK_VIEW_EVENTS.SET_RANK_PAYCHECK, uid, newAmount);
+            alt.emit(F_PAYCHECK_VIEW_EVENTS.SET_RANK_PAYCHECK, uid, newAmount, this.faction._id);
         },
         isFactionOwner() {
-            const member = FactionParser.getMember(this.faction, this.character);
-
-            if (!member) {
-                return false;
-            }
-
-            return member.hasOwnership;
+            return this.isAdmin;
         },
         updateClaimTime() {
             if (!('alt' in window)) {
@@ -104,7 +95,7 @@ export default defineComponent({
                 return;
             }
 
-            alt.emit(F_PAYCHECK_VIEW_EVENTS.SET_TIME, Math.abs(this.claimTime));
+            alt.emit(F_PAYCHECK_VIEW_EVENTS.SET_TIME, Math.abs(this.claimTime), this.faction._id);
         },
         dataSetup() {
             this.claimTime = this.faction.settings.paycheckClaimTime ? this.faction.settings.paycheckClaimTime : 0;

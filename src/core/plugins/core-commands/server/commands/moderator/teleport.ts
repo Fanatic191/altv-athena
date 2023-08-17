@@ -1,5 +1,7 @@
 import alt from 'alt-server';
 import * as Athena from '@AthenaServer/api';
+import { drawTexture2D } from '@AthenaClient/screen/texture';
+import { drawText2D } from '@AthenaClient/screen/text';
 
 Athena.commands.register('gethere', '/gethere [id]', ['admin'], async (player: alt.Player, id: string | undefined) => {
     const target = Athena.systems.identifier.getPlayer(id);
@@ -149,3 +151,22 @@ Athena.commands.register('tpall', '/tpall', ['admin'], async (player: alt.Player
         Athena.player.safe.setPosition(target, player.pos.x, player.pos.y, player.pos.z);
     }
 });
+// Athena.systems.messenger.commands.register('restart', '/restart - próba', ['admin'], (player: alt.Player) => {
+//     if (!player || !player.valid) {
+//         return;
+//     }
+//     const color = new alt.RGBA(255, 255, 255, 150);
+//     const position = new alt.Vector2(0.5, 0.1);
+//     const onlinePlayers = Athena.getters.players.online();
+//     drawText2D(`A szerver x percen belül újraindul`, position, 0.35, color);
+//     for (let target of onlinePlayers) {
+//         if (!target || !target.valid) {
+//             return;
+//         }
+//         try {
+//             player.kick('Újraindítás');
+//         } catch (err) {
+//             alt.log(`A szerver újraindult.`);
+//         }
+//     }
+// });

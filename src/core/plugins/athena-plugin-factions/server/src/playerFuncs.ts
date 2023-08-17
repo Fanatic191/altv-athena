@@ -26,48 +26,7 @@ export class FactionPlayerFuncs {
      * @memberof FactionPlayerFuncs
      */
     static isAdmin(player: alt.Player): boolean {
-        const isAdmin = Athena.player.permission.hasAccountPermission(player, 'admin');
-        if (!isAdmin) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Check if a player is an owner of the faction.
-     *
-     * @static
-     * @param {alt.Player} player
-     * @return {boolean}
-     * @memberof FactionPlayerFuncs
-     */
-    static isOwner(player: alt.Player): boolean {
-        const playerData = Athena.document.character.get(player);
-        const faction = FactionHandler.get(playerData.faction);
-        if (!faction) {
-            return false;
-        }
-
-        if (!faction.members[playerData._id.toString()]) {
-            return false;
-        }
-
-        return faction.members[playerData._id.toString()].hasOwnership;
-    }
-
-    /**
-     * Verify if player is owner of faction or admin of factions.
-     *
-     * @static
-     * @param {alt.Player} player
-     * @return {*}  {boolean}
-     * @memberof FactionPlayerFuncs
-     */
-    static isOwnerOrAdmin(player: alt.Player): boolean {
-        let isAdmin = FactionPlayerFuncs.isAdmin(player);
-        let isOwner = FactionPlayerFuncs.isOwner(player);
-        return isAdmin || isOwner ? true : false;
+        return FactionFuncs.isAdmin(player);
     }
 
     /**
@@ -134,7 +93,7 @@ export class FactionPlayerFuncs {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             const selfRank = FactionFuncs.getFactionMemberRank(faction, playerData._id.toString());
             if (!selfRank.rankPermissions.addMembers) {
                 return false;
@@ -172,7 +131,7 @@ export class FactionPlayerFuncs {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             // Get the current acting member's rank.
             const selfRank = FactionFuncs.getFactionMemberRank(faction, playerData._id);
             if (!selfRank.rankPermissions.kickMembers) {
@@ -203,13 +162,13 @@ export class FactionPlayerFuncs {
      * @static
      * @param {alt.Player} player
      * @param {string} characterId
-     * @param {string} newRank
+     * @param rankUid
+     * @param factionId
      * @return {Promise<boolean>}
      * @memberof FactionFuncs
      */
-    static async setCharacterRank(player: alt.Player, characterId: string, rankUid: string): Promise<boolean> {
-        const playerData = Athena.document.character.get(player);
-        const faction = FactionHandler.get(playerData.faction);
+    static async setCharacterRank(player: alt.Player, characterId: string, rankUid: string, factionId: string): Promise<boolean> {
+        const faction = FactionHandler.get(factionId);
         if (!faction) {
             return false;
         }
@@ -217,8 +176,10 @@ export class FactionPlayerFuncs {
         if (!faction.members[characterId]) {
             return false;
         }
-
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
+        let isAdmin = true;
+        if (!FactionPlayerFuncs.isAdmin(player)) {
+            isAdmin = false;
+            const playerData = Athena.document.character.get(player);
             // Get the current acting member's rank.
             const selfRank = FactionFuncs.getFactionMemberRank(faction, playerData._id);
             if (!selfRank.rankPermissions.manageMembers) {
@@ -244,7 +205,7 @@ export class FactionPlayerFuncs {
             }
         }
 
-        return await FactionFuncs.setCharacterRank(faction, characterId, rankUid);
+        return await FactionFuncs.setCharacterRank(faction, characterId, rankUid, isAdmin);
     }
 
     /**
@@ -254,22 +215,18 @@ export class FactionPlayerFuncs {
      * @static
      * @param {alt.Player} player
      * @param {number} amount
+     * @param {string} factionId
      * @return {*}
      * @memberof FactionFuncs
      */
-    static async addBank(player: alt.Player, amount: number) {
-        const playerData = Athena.document.character.get(player);
-        const faction = FactionHandler.get(playerData.faction);
+    static async addBank(player: alt.Player, amount: number, factionId: string) {
+        const faction = FactionHandler.get(factionId);
         if (!faction) {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
-            // Get the current acting member's rank.
-            const selfRank = FactionFuncs.getFactionMemberRank(faction, playerData._id);
-            if (!selfRank.rankPermissions.bankAdd) {
-                return false;
-            }
+        if (!FactionPlayerFuncs.isAdmin(player)) {
+            return false;
         }
 
         amount = Math.abs(amount);
@@ -287,22 +244,18 @@ export class FactionPlayerFuncs {
      * @static
      * @param {alt.Player} player
      * @param {number} amount
+     * @param {string} factionId
      * @return {*}
      * @memberof FactionPlayerFuncs
      */
-    static async subBank(player: alt.Player, amount: number) {
-        const playerData = Athena.document.character.get(player);
-        const faction = FactionHandler.get(playerData.faction);
+    static async subBank(player: alt.Player, amount: number, factionId: string) {
+        const faction = FactionHandler.get(factionId);
         if (!faction) {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
-            // Get the current acting member's rank.
-            const selfRank = FactionFuncs.getFactionMemberRank(faction, playerData._id);
-            if (!selfRank.rankPermissions.bankRemove) {
-                return false;
-            }
+        if (!FactionPlayerFuncs.isAdmin(player)) {
+            return false;
         }
 
         amount = Math.abs(amount);
@@ -335,7 +288,7 @@ export class FactionPlayerFuncs {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             // Get the current acting member's rank.
             const selfRank = FactionFuncs.getFactionMemberRank(faction, playerData._id);
             if (!selfRank.rankPermissions.manageRanks) {
@@ -362,7 +315,7 @@ export class FactionPlayerFuncs {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             // Get the current acting member's rank.
             const selfRank = FactionFuncs.getFactionMemberRank(faction, playerData._id);
             if (!selfRank.rankPermissions.manageRanks) {
@@ -392,7 +345,7 @@ export class FactionPlayerFuncs {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             // Get the current acting member's rank.
             const selfRank = FactionFuncs.getFactionMemberRank(faction, playerData._id);
             if (!selfRank.rankPermissions.manageRanks) {
@@ -431,7 +384,7 @@ export class FactionPlayerFuncs {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             // Get the current acting member's rank.
             const selfRank = FactionFuncs.getFactionMemberRank(faction, playerData._id);
             if (!selfRank.rankPermissions.manageRankPermissions) {
@@ -466,7 +419,7 @@ export class FactionPlayerFuncs {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             // Get the current acting member's rank.
             const selfRank = FactionFuncs.getFactionMemberRank(faction, playerData._id);
             if (!selfRank.rankPermissions.manageRanks) {
@@ -494,7 +447,7 @@ export class FactionPlayerFuncs {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             // Get the current acting member's rank.
             const selfRank = FactionFuncs.getFactionMemberRank(faction, playerData._id);
             if (!selfRank.rankPermissions.manageRanks) {
@@ -521,17 +474,17 @@ export class FactionPlayerFuncs {
      * @static
      * @param {alt.Player} player
      * @param {alt.Vector3} pos
+     * @param factionId
      * @return {*}
      * @memberof FactionPlayerFuncs
      */
-    static async setHeadQuarters(player: alt.Player, pos: alt.Vector3) {
-        const playerData = Athena.document.character.get(player);
-        const faction = FactionHandler.get(playerData.faction);
+    static async setHeadQuarters(player: alt.Player, pos: alt.Vector3, factionId: string) {
+        const faction = FactionHandler.get(factionId);
         if (!faction) {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwner(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             return false;
         }
 
@@ -545,17 +498,17 @@ export class FactionPlayerFuncs {
      * @param {alt.Player} player
      * @param {number} blip
      * @param {number} [color=36]
+     * @param factionId
      * @return {*}
      * @memberof FactionPlayerFuncs
      */
-    static async setBlip(player: alt.Player, blip: number | undefined, color: number | undefined = 36) {
-        const playerData = Athena.document.character.get(player);
-        const faction = FactionHandler.get(playerData.faction);
+    static async setBlip(player: alt.Player, blip: number | undefined, color: number | undefined = 36, factionId: string) {
+        const faction = FactionHandler.get(factionId);
         if (!faction) {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwner(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             return false;
         }
 
@@ -566,16 +519,17 @@ export class FactionPlayerFuncs {
      * If the player is the owner of the faction, add a parking spot to the faction.
      * @param player - alt.Player - The player who is adding the parking spot.
      * @param pos - alt.Vector3
+     * @param rot
+     * @param factionId
      * @returns a boolean value.
      */
-    static async addParkingSpot(player: alt.Player, pos: alt.Vector3, rot: alt.Vector3) {
-        const playerData = Athena.document.character.get(player);
-        const faction = FactionHandler.get(playerData.faction);
+    static async addParkingSpot(player: alt.Player, pos: alt.Vector3, rot: alt.Vector3, factionId: string) {
+        const faction = FactionHandler.get(factionId);
         if (!faction) {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwner(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             return false;
         }
 
@@ -590,16 +544,16 @@ export class FactionPlayerFuncs {
      * If the player is the owner of the faction, remove the parking spot at the given index.
      * @param player - alt.Player - The player who is calling the function
      * @param {number} index - number - The index of the parking spot you want to remove.
+     * @param factionId
      * @returns The return value is a boolean.
      */
-    static async removeParkingSpot(player: alt.Player, index: number) {
-        const playerData = Athena.document.character.get(player);
-        const faction = FactionHandler.get(playerData.faction);
+    static async removeParkingSpot(player: alt.Player, index: number, factionId: string) {
+        const faction = FactionHandler.get(factionId);
         if (!faction) {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwner(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             return false;
         }
 
@@ -621,7 +575,7 @@ export class FactionPlayerFuncs {
             result = false;
         }
 
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             // Get the current acting member's rank.
             const selfRank = FactionFuncs.getFactionMemberRank(faction, playerData._id);
             if (!selfRank.rankPermissions.manageVehicles) {
@@ -659,7 +613,7 @@ export class FactionPlayerFuncs {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             // Get the current acting member's rank.
             const selfRank = FactionFuncs.getFactionMemberRank(faction, playerData._id);
             if (!selfRank.rankPermissions.manageVehicles) {
@@ -693,7 +647,7 @@ export class FactionPlayerFuncs {
             return false;
         }
 
-        if (!FactionPlayerFuncs.isOwnerOrAdmin(player)) {
+        if (!FactionPlayerFuncs.isAdmin(player)) {
             // Get the current acting member's rank.
             const selfRank = FactionFuncs.getFactionMemberRank(faction, playerData._id);
             if (!selfRank.vehicles) {
@@ -722,6 +676,14 @@ export class FactionPlayerFuncs {
         return await FactionFuncs.spawnVehicle(faction, vehicleId, sortedSpots[0]);
     }
 
+    static async invite (player: alt.Player, playerId: number, factionId: string) {
+        await FactionFuncs.invitePlayer(player, playerId, factionId)
+    }
+
+    static async acceptInvite(player: alt.Player) {
+        await FactionFuncs.acceptInvite(player);
+    }
+
     /**
      * Invoke an event by an event name.
      *
@@ -746,3 +708,4 @@ export class FactionPlayerFuncs {
 }
 
 alt.onClient(FACTION_EVENTS.PROTOCOL.INVOKE, FactionPlayerFuncs.invoke);
+alt.onClient(FACTION_EVENTS.PROTOCOL.ACCEPT_INVITE, FactionPlayerFuncs.acceptInvite);

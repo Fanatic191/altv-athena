@@ -16,6 +16,7 @@
     "migrationDistance": 150,
     "modules": ["js-module"],
     "resources": [
+        "mods/rpd-elfogo",
         "mods/phantom4",
         "mods/argento",
         "mods/audace",

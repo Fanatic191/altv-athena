@@ -1,11 +1,18 @@
 <template>
     <div class="factions-wrapper stack">
+      <Invite
+          v-if="inviteOpen"
+          @cancel-invite="inviteClose"
+          v-bind:isAdmin="isAdmin"
+          v-bind:faction="faction"
+          class="factions-wrapper stack" />
         <div class="toolbar split space-between">
             <span class="pl-2">{{ faction && faction.name ? faction.name : 'Faction Name Missing' }}</span>
             <Icon class="red--text red--hover hover pr-2" :size="24" icon="icon-times-circle" @click="close" />
         </div>
         <div class="split" style="width: 100%">
             <div class="factions-nav">
+                <Button color="green" v-if="canInvite" @click="inviteOpen = true;">Invite</Button>
                 <Navigation v-bind:pages="pages" v-bind:page="pageIndex" @navigate="setPage" />
             </div>
             <div class="factions-content stack" v-if="faction">
@@ -14,6 +21,7 @@
                     class="fade-in"
                     :key="pageIndex"
                     v-bind:faction="faction"
+                    v-bind:isAdmin="isAdmin"
                     v-bind:character="character"
                     v-bind:money="money"
                     v-bind:pos="pos"
@@ -33,6 +41,7 @@ import { ExampleFactionData } from './utility/exampleFactionData';
 import { Faction } from '../shared/interfaces';
 import { FACTION_EVENTS } from '../shared/factionEvents';
 import { Vector3 } from '../../gp-athena-utils/shared/interfaces/vector';
+import {FactionParser} from "@plugins/athena-plugin-factions/webview/utility/factionParser";
 
 export const ComponentName = 'Factions';
 export default defineComponent({
@@ -44,6 +53,7 @@ export default defineComponent({
         // Local Components
         Navigation: defineAsyncComponent(() => import('./components/Navigation.vue')),
         Header: defineAsyncComponent(() => import('./components/Header.vue')),
+        Invite: defineAsyncComponent(() => import('./components/Invite.vue')),
         Actions: defineAsyncComponent(() => import('./pages/Actions.vue')),
         Bank: defineAsyncComponent(() => import('./pages/Bank.vue')),
         Members: defineAsyncComponent(() => import('./pages/Members.vue')),
@@ -56,14 +66,9 @@ export default defineComponent({
     },
     data() {
         return {
+            inviteOpen: false,
             pageIndex: 0,
             pages: [
-                { name: 'Members', page: 'Members' },
-                { name: 'Ranks', page: 'Ranks' },
-                { name: 'Bank', page: 'Bank' },
-                { name: 'Vehicles', page: 'Vehicles' },
-                { name: 'Actions', page: 'Actions' },
-                { name: 'Settings', page: 'Settings' },
             ],
             faction: null,
             // Character IDs and their associated test ranks...
@@ -76,11 +81,16 @@ export default defineComponent({
             rot: { x: 0, y: 0, z: 0 },
             // Vehicles currently spawned
             spawnedVehicles: ['626c64fbfdf5ff231b4991cc'],
+            isAdmin: false,
+            canInvite: false
         };
     },
     methods: {
         setPage(pageIndex: number) {
             this.pageIndex = pageIndex;
+        },
+        inviteClose() {
+            this.inviteOpen = false;
         },
         updateFaction(
             faction: Faction,
@@ -89,15 +99,32 @@ export default defineComponent({
             pos: Vector3,
             rot: Vector3,
             spawnedVehicles: Array<string>,
+            isAdmin: boolean
         ) {
             this.faction = faction;
             this.character = character;
             this.money = money;
             this.pos = pos;
             this.rot = rot;
+            this.isAdmin = isAdmin;
+
+            this.pages = [
+              { name: 'Members', page: 'Members' },
+              { name: 'Ranks', page: 'Ranks' },
+              { name: 'Bank', page: 'Bank' },
+              { name: 'Vehicles', page: 'Vehicles' },
+              { name: 'Actions', page: 'Actions' },
+            ];
+            if(isAdmin) {
+              this.pages.push({ name: 'Settings', page: 'Settings' });
+              this.canInvite = true;
+            } else {
+              const member = FactionParser.getMember(this.faction, this.character);
+              const rank = FactionParser.getRank(this.faction, member);
+              this.canInvite = rank.rankPermissions.manageMembers;
+            }
 
             if (typeof spawnedVehicles === 'string') {
-                console.log(spawnedVehicles);
                 this.spawnedVehicles = JSON.parse(spawnedVehicles);
             } else {
                 this.spawnedVehicles = spawnedVehicles;
@@ -111,7 +138,6 @@ export default defineComponent({
                 return;
             }
 
-            console.log('test');
             alt.emit(FACTION_EVENTS.WEBVIEW.CLOSE);
         },
         handlePress(e: KeyboardEvent) {
@@ -121,7 +147,7 @@ export default defineComponent({
             }
 
             this.close();
-        },
+        }
     },
     mounted() {
         document.addEventListener('keyup', this.handlePress);
@@ -131,6 +157,13 @@ export default defineComponent({
             alt.emit(FACTION_EVENTS.WEBVIEW.READY);
         } else {
             this.faction = ExampleFactionData;
+          this.pages = [
+            { name: 'Members', page: 'Members' },
+            { name: 'Ranks', page: 'Ranks' },
+            { name: 'Bank', page: 'Bank' },
+            { name: 'Vehicles', page: 'Vehicles' },
+            { name: 'Actions', page: 'Actions' },
+          ];
         }
     },
     unmounted() {

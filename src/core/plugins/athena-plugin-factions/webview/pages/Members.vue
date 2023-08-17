@@ -5,9 +5,9 @@
                 <template v-if="!selected">
                     <div class="acting-member stack center mb-4">
                         <div class="headline mb-2 grey--text" style="font-size: 24px !important">
-                            Hello, {{ getMember(character).name.replace('_', ' ') }}.
+                            Hello, {{ isAdmin ? "Admin" : getMember(character).name.replace('_', ' ') }}.
                         </div>
-                        <div class="subtitle-2 grey--text">Rank - {{ getRankName(getMember(character).rank) }}</div>
+                        <div class="subtitle-2 grey--text" v-if="!isAdmin">Rank - {{ getRankName(getMember(character).rank) }}</div>
                     </div>
                     <div class="acting-member">
                         <span class="subtitle-1 grey--text">Select a member to modify permissions.</span>
@@ -31,7 +31,7 @@
                             <div class="perm-desc grey--text">
                                 {{ perm.desc }}
                             </div>
-                            <div v-if="perm && perm.key && perm.value">
+                            <div v-if="(perm && perm.key && perm.value)">
                                 <Button class="perm-button" color="blue" @click="permAction(perm)">{{
                                     perm.name
                                 }}</Button>
@@ -53,7 +53,7 @@
                     </div>
                 </template>
             </div>
-            <div class="members">
+            <div class="members" v-if="faction.members">
                 <!-- Search -->
                 <div class="members-top pl-4 pr-6">
                     <input type="text" class="search" placeholder="Search members" v-model="search" />
@@ -73,7 +73,7 @@
                                 class="member mb-2"
                             >
                                 <div class="split space-between">
-                                    <template v-if="!isRankHigher(rank)">
+                                    <template v-if="!isRankHigher(rank) || isAdmin">
                                         <Button
                                             @click="() => selectMember(member)"
                                             :color="getMemberSelectColor(member)"
@@ -114,6 +114,7 @@ export default defineComponent({
     props: {
         faction: Object as () => Faction,
         character: String,
+        isAdmin: Boolean
     },
     data() {
         return {
@@ -202,7 +203,7 @@ export default defineComponent({
 
             const actingRank = FactionParser.getRank(this.faction, character);
             const againstRank = FactionParser.getRank(this.faction, rank);
-            const validPermissions = FactionParser.getValidPermissions(actingRank, againstRank, character.hasOwnership);
+            const validPermissions = FactionParser.getValidPermissions(actingRank, againstRank, this.isAdmin);
             const permissionList: Array<{
                 key: string;
                 value: boolean;
@@ -225,7 +226,7 @@ export default defineComponent({
                 }
 
                 if (key === RankPermissionNames.kickMembers) {
-                    if (validPermissions.hasOwnProperty(key) && character.name !== this.selected) {
+                    if (this.isAdmin ||(validPermissions.hasOwnProperty(key) && character.name !== this.selected)) {
                         permissionList.push({ key, value: validPermissions[key], name, desc });
                     } else {
                         permissionList.push({ key, value: false, name, desc });
@@ -233,7 +234,7 @@ export default defineComponent({
                 }
 
                 if (key === RankPermissionNames.manageMembers) {
-                    if (validPermissions.hasOwnProperty(key) && character.name !== this.selected) {
+                    if (this.isAdmin || (validPermissions.hasOwnProperty(key) && character.name !== this.selected)) {
                         permissionList.push({
                             key,
                             uniqueValue: 'promote',
@@ -263,7 +264,7 @@ export default defineComponent({
             }
 
             if (perm.key === RankPermissionNames.kickMembers) {
-                alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.KICK_MEMBER, this.selected.id);
+                alt.emit(FACTION_EVENTS.WEBVIEW.ACTION, FACTION_PFUNC.KICK_MEMBER, this.selected.id, this.faction._id);
                 this.selected = null;
                 return;
             }
@@ -282,6 +283,7 @@ export default defineComponent({
                         FACTION_PFUNC.SET_CHARACTER_RANK,
                         this.selected.id,
                         ranks[index - 1].uid,
+                        this.faction._id
                     );
                     this.selected = null;
                     return;
@@ -293,6 +295,7 @@ export default defineComponent({
                         FACTION_PFUNC.SET_CHARACTER_RANK,
                         this.selected.id,
                         ranks[index + 1].uid,
+                        this.faction._id
                     );
                     this.selected = null;
                     return;

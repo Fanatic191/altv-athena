@@ -17,7 +17,7 @@ export const PlantAnimationList: IPlantAnim[] = [
         flag: 49,
         duration: 3000,
         attachable: {
-            bone: 57005,
+            bone: PedBone.IK_R_Hand,
             model: 'prop_cs_trowel',
             pos: { x: 0.1, y: 0.01, z: -0.03 },
             rot: { x: 130, y: 70, z: -5 },
@@ -37,7 +37,7 @@ export const PlantAnimationList: IPlantAnim[] = [
         flag: ANIMATION_FLAGS.REPEAT,
         duration: 3000,
         attachable: {
-            bone: 57005,
+            bone: PedBone.IK_R_Hand,
             model: 'prop_wateringcan',
             pos: { x: 0.4, y: 0, z: 0 },
             rot: { x: 348, y: 325, z: 0 },

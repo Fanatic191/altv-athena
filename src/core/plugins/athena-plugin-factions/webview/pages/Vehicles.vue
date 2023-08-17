@@ -70,12 +70,12 @@
 
 <script lang="ts">
 import { defineComponent, defineAsyncComponent } from 'vue';
-import { Vector3 } from '../../../../shared/interfaces/vector';
 import { FACTION_EVENTS } from '../../shared/factionEvents';
 import { FACTION_PFUNC } from '../../shared/funcNames';
 import { Faction } from '../../shared/interfaces';
 import { FactionParser } from '../utility/factionParser';
 import ResolvePath from '@utility/pathResolver';
+import {Vector3} from "@AthenaPlugins/gp-athena-utils/shared/interfaces/vector";
 
 const ComponentName = 'Vehicles';
 export default defineComponent({
@@ -92,6 +92,7 @@ export default defineComponent({
         pos: Object as () => Vector3,
         rot: Object as () => Vector3,
         spawnedVehicles: Array as () => Array<string>,
+        isAdmin: Boolean
     },
     data() {
         return {
@@ -119,7 +120,7 @@ export default defineComponent({
             const member = FactionParser.getMember(this.faction, this.character);
             const rank = FactionParser.getRank(this.faction, member);
 
-            this.manageVehicles = member.hasOwnership || rank.rankPermissions.manageVehicles ? true : false;
+            this.manageVehicles = this.isAdmin || rank.rankPermissions.manageVehicles ? true : false;
         },
         showRankPermissions(vehicle: { id: string; model: string }) {
             this.selectedVehicle = vehicle;

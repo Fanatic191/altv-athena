@@ -86,8 +86,6 @@ export const ExampleFactionData: Faction = {
             actionPermissions: [],
             rankPermissions: {
                 addMembers: true,
-                bankAdd: true,
-                bankRemove: true,
                 kickMembers: true,
                 manageMembers: true,
                 manageRanks: true,
@@ -103,8 +101,6 @@ export const ExampleFactionData: Faction = {
             actionPermissions: [],
             rankPermissions: {
                 addMembers: true,
-                bankAdd: true,
-                bankRemove: false,
                 kickMembers: true,
                 manageMembers: true,
                 manageRanks: false,
@@ -120,8 +116,6 @@ export const ExampleFactionData: Faction = {
             actionPermissions: [],
             rankPermissions: {
                 addMembers: true,
-                bankAdd: true,
-                bankRemove: false,
                 kickMembers: true,
                 manageMembers: true,
                 manageRanks: false,
@@ -137,8 +131,6 @@ export const ExampleFactionData: Faction = {
             actionPermissions: [],
             rankPermissions: {
                 addMembers: true,
-                bankAdd: true,
-                bankRemove: false,
                 kickMembers: true,
                 manageMembers: true,
                 manageRanks: false,
@@ -154,8 +146,6 @@ export const ExampleFactionData: Faction = {
             actionPermissions: [],
             rankPermissions: {
                 addMembers: false,
-                bankAdd: true,
-                bankRemove: false,
                 kickMembers: false,
                 manageMembers: false,
                 manageRanks: false,

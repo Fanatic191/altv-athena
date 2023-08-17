@@ -28,6 +28,7 @@
                 v-bind:faction="faction"
                 v-bind:character="character"
                 v-bind:is-owner="isOwner"
+                v-bind:isAdmin="isAdmin"
                 v-bind:money="money"
                 v-bind:pos="pos"
                 v-bind:rot="rot"
@@ -38,10 +39,10 @@
 
 <script lang="ts">
 import { defineComponent, defineAsyncComponent } from 'vue';
-import { Vector3 } from '../../../../shared/interfaces/vector';
 import { Faction } from '../../shared/interfaces';
 import { FactionPageInjections } from '../injections';
 import { FactionParser } from '../utility/factionParser';
+import {Vector3} from "@AthenaPlugins/gp-athena-utils/shared/interfaces/vector";
 
 const ComponentName = 'Settings';
 export default defineComponent({
@@ -60,6 +61,7 @@ export default defineComponent({
         pos: Object as () => Vector3,
         rot: Object as () => Vector3,
         money: Number,
+        isAdmin: Boolean
     },
     data() {
         return {
@@ -71,12 +73,7 @@ export default defineComponent({
             return Object.keys(FactionPageInjections.settings);
         },
         hasOwnership() {
-            const member = FactionParser.getMember(this.faction, this.character);
-            if (!member) {
-                return false;
-            }
-
-            return member.hasOwnership;
+            return this.isAdmin;
         },
     },
     mounted() {

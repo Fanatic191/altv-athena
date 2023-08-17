@@ -38,7 +38,7 @@ class Startup {
             })
             .then((res) => {
                 if (res) {
-                    alt.log(`MongoDB connection was established.`);
+                    alt.log(`Adatrbázis kapcsolat stabil!`);
                     return;
                 }
 
@@ -75,9 +75,9 @@ class Startup {
         }
 
         try {
-            player.kick('[Athena] Connected too early. Server still warming up.');
+            player.kick('A szerver jelenleg újraindítás alatt..');
         } catch (err) {
-            alt.log(`[Athena] A reconnection event happened too early. Try again.`);
+            alt.log(`Túl korán lépett fel!`);
         }
     }
 }

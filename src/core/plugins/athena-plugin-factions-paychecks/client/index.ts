@@ -55,14 +55,14 @@ class InternalFunctions {
         _view.emit(F_PAYCHECK_VIEW_EVENTS.SET_TIME, value);
     }
 
-    static setTime(value: number) {
+    static setTime(value: number, factionId: string) {
         console.log(value);
-        alt.emitServer(F_PAYCHECK_EVENTS.SET_PAYCHECK_TIME, value);
+        alt.emitServer(F_PAYCHECK_EVENTS.SET_PAYCHECK_TIME, value, factionId);
     }
 
-    static setRankPaycheck(uid: string, value: number) {
+    static setRankPaycheck(uid: string, value: number, factionId: string) {
         console.log(uid, value);
-        alt.emitServer(F_PAYCHECK_EVENTS.SET_RANK_PAYCHECK, uid, value);
+        alt.emitServer(F_PAYCHECK_EVENTS.SET_RANK_PAYCHECK, uid, value, factionId);
     }
 
     static requestTime() {

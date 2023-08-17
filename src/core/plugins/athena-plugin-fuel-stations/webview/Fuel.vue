@@ -70,8 +70,8 @@ export default defineComponent({
 
                 <p style="color: yellow">Start work today!</p>`,
             locales: {
-                LABEL_DECLINE: 'Decline',
-                LABEL_ACCEPT: 'Accept',
+                LABEL_DECLINE: 'Mégsem',
+                LABEL_ACCEPT: 'Elfogad',
             },
             maxAmount: undefined,
             amount: 1,

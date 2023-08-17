@@ -7,13 +7,12 @@ export const DefaultRanks: Array<FactionRank> = [
         actionPermissions: [],
         rankPermissions: {
             addMembers: true,
-            bankAdd: true,
-            bankRemove: true,
             kickMembers: true,
             manageMembers: true,
             manageRanks: true,
             manageRankPermissions: true,
             canOpenStorages: true,
+            manageVehicles: true
         },
         vehicles: [],
         weight: 99,
@@ -23,13 +22,12 @@ export const DefaultRanks: Array<FactionRank> = [
         actionPermissions: [],
         rankPermissions: {
             addMembers: false,
-            bankAdd: false,
-            bankRemove: false,
             kickMembers: false,
             manageMembers: false,
             manageRanks: false,
             manageRankPermissions: false,
             canOpenStorages: true,
+            manageVehicles: false
         },
         vehicles: [],
         weight: 1,
@@ -38,8 +36,6 @@ export const DefaultRanks: Array<FactionRank> = [
 
 export const AllRankPermissions: Complete<RankPermissions> = {
     addMembers: false,
-    bankAdd: false,
-    bankRemove: false,
     kickMembers: false,
     manageMembers: false,
     manageRanks: false,
